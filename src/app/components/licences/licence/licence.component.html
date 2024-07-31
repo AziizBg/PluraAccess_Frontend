@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-card-header>
+    <div style="width: 100%">
+      <div style="display: flex; gap: 20px">
+        <div mat-card-avatar [ngClass]="licence?.currentSession ? 'taken-image' : 'available-image'"></div>
+        <div>
+          <!-- <mat-card-title>Licence 1</mat-card-title> -->
+          <mat-card-title>Licence n°{{ licence?.id }}</mat-card-title>
+          <mat-card-subtitle>
+            @if (licence?.currentSession) { Taken by {{
+              licence?.currentSession?.user?.name
+            }}
+            }
+            @else {
+              Available
+            }
+          </mat-card-subtitle>
+        </div>
+      </div>
+      @if (licence?.currentSession) {
+      <mat-card-subtitle>
+        <mat-card-actions align="start">
+          <countdown #cd [config]="countdownConfig"></countdown>        
+        </mat-card-actions>
+      </mat-card-subtitle>
+      } @else {
+      <mat-card-actions align="end">
+        <button mat-flat-button>Take Licence</button>
+      </mat-card-actions>
+      }
+    </div>
+  </mat-card-header>
+</mat-card>

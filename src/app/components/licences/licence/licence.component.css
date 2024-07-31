@@ -1,0 +1,21 @@
+.taken-image {
+    background-image: url("../../../../../public/taken.png");
+    background-size: cover;
+  }
+
+.available-image{
+  background-image: url("../../../../../public/available.png");
+  background-size: cover; 
+}
+
+  mat-card-subtitle {
+    font-size: 0.9rem;
+    color: #757575d5;
+    margin-left: 16px;
+  }
+
+  mat-card{
+    margin-top: 20px;
+    height: fit-content;
+    background-color: white;
+}

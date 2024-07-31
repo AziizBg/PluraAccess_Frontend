@@ -1,1 +1,9 @@
-<p>licences works!</p>
+<!-- <mat-card> -->
+  <mat-card-header>
+    <h2>Licences</h2>
+  </mat-card-header>
+  @if (data.length>1) {
+  <app-licence [licence]="data[0]"></app-licence>
+  <app-licence [licence]="data[1]"></app-licence>
+}
+<!-- </mat-card> -->
