@@ -8,8 +8,15 @@ mat-card-subtitle {
     margin-left: 16px;
     font-weight: 100;
   }
-.logo{
-    background-image: url("../../../../../public/logo.png");
+.available{
+    background-image: url("../../../../../public/available.png");
     background-size: cover;
-
+}
+.unavailable{
+    background-image: url("../../../../../public/unavailable.png");
+    background-size: cover;
+}
+.learning{
+    background-image: url("../../../../../public/learning.png");
+    background-size: cover;
 }

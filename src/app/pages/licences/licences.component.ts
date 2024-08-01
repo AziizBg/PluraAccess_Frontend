@@ -41,11 +41,10 @@ export class LicencesComponent implements OnInit {
 
       else{
         if(this.data.filter(licence => !licence.currentSession).length>0) 
-        this.comment= allComments. available;
+        this.comment= allComments.available;
 
         else 
          this.comment= allComments.unavailable;
-
       }
     });
   }
