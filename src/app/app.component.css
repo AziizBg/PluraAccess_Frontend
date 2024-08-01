@@ -8,7 +8,9 @@ mat-card{
 }
 .container{
     background-image: url("../../public/background.png");
-    /* background-size: contain; */
+    background-size: cover;
     background-position: center;
-    min-height: 120vh;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background-attachment: fixed; 
 }

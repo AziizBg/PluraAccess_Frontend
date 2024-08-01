@@ -1,13 +1,14 @@
-<mat-card-subtitle>Welcome {{ name }} !</mat-card-subtitle>
+<mat-card-subtitle style="color: #e9e9e9d5;">Welcome {{ name }} !</mat-card-subtitle>
 <mat-card>
   <mat-card-header>
     <div
       mat-card-avatar
       ngClass="logo"
-      style="height: 100px; width: 100px; margin-top: -20px; margin-bottom: 0px;"
+      style="height: 100px; width: 100px; margin-top: -10px; margin-bottom: 0px;"
     ></div>
-    <div style="align-items: center; width: 100%; margin-top: 15px;">
-      <mat-card-title>{{ message }}</mat-card-title>
+    <div style="align-items: center; width: 100%; margin-top: 10px;">
+      <mat-card-title>{{ comment?.title }}</mat-card-title>
+      <mat-card-subtitle>{{comment?.subtitle}}</mat-card-subtitle>
     </div>
   </mat-card-header>
 </mat-card>

@@ -9,6 +9,8 @@ import { LicenceComponent } from '../../components/licences/licence/licence.comp
 import { User } from '../../models/user';
 import { CommentsComponent } from '../../components/licences/comments/comments.component';
 import { UserService } from '../../services/user.service';
+import { Comment } from '../../models/comment';
+import { allComments } from '../../data/all-comments';
 
 
 @Component({
@@ -23,7 +25,7 @@ export class LicencesComponent implements OnInit {
   data: Licence[] = [];
   user:User={id:-1, name:""};
   users:User[]=[];
-  message:string='';
+  comment:Comment={title:"", subtitle:""}
 
   ngOnInit(): void {
     this.LoadUsersData();
@@ -34,10 +36,16 @@ export class LicencesComponent implements OnInit {
       this.data = item.$values;
       console.log('data:', this.data);
       this.checkUserStudying();
-      if(this.user.isStudying) this.message="Session going on ...";
+      if(this.user.isStudying) 
+      this.comment= allComments.learning;
+
       else{
-        if(this.data.filter(licence => !licence.currentSession).length>0) this.message="Licences available"
-        else this.message= "No licence available";
+        if(this.data.filter(licence => !licence.currentSession).length>0) 
+        this.comment= allComments. available;
+
+        else 
+         this.comment= allComments.unavailable;
+
       }
     });
   }
@@ -45,23 +53,23 @@ export class LicencesComponent implements OnInit {
     this.userService.getAll().subscribe((item:ResponseSchema) => {
       this.users = item.$values;
       console.log('users:', this.users);
-      this.user = this.users[1];
+      this.user = this.users[0];
     })
   }
 
   takeLicence(id:number, user:User){
-    this.message="Requesting licence ..."
+    this.comment = allComments.requesting;
     this.user.isRequesting=true;
     this.licenceService.takeLicence(id, user).subscribe((item:ResponseSchema)=>{
       this.user.isStudying=true;
       this.user.isRequesting=false;
-      this.message = "Session going on";
+      this.comment= allComments.learning;
       this.LoadSessionsData();
       console.log("item: ",item);
     })
   }
   returnLicence(id:number){
-    this.message="Returning licence ..."
+    this.comment= allComments.returning;
     this.licenceService.returnLicence(id).subscribe((item:ResponseSchema)=>{
       this.user.isStudying=false;
       this.LoadSessionsData();

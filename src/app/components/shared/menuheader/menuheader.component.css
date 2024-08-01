@@ -1,3 +1,7 @@
 mat-toolbar{
-    background-color: #fdfbffb0;
+    background-color: #fdfdfd27;
+}
+button{
+    color: white !important;
+    font-weight: 400;
 }

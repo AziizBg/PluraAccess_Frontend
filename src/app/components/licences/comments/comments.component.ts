@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MaterialModule } from '../../../../module/Material.Module';
 import { CommonModule } from '@angular/common';
+import { Comment } from '../../../models/comment';
 
 @Component({
   selector: 'app-comments',
@@ -11,7 +12,8 @@ import { CommonModule } from '@angular/common';
 })
 export class CommentsComponent {
   @Input()
-  message:string|undefined;
-  @Input()
   name:string|undefined;
+  @Input()
+  comment:Comment|undefined;
+
 }
