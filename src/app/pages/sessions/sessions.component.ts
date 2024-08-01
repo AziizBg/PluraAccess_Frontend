@@ -20,8 +20,7 @@ export class SessionsComponent implements OnInit {
   LoadInitialData() {
     this.service.getAll().subscribe((item:ResponseSchema) => {
       this.data = item.$values;
-      console.log(this.data[0]);
-      console.log(this.data[1]);
+      console.log(this.data);
     });
   }
 }

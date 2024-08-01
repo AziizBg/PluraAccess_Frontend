@@ -1,9 +1,12 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { CountdownModule } from 'ngx-countdown';
 import { Licence } from '../../../models/licence';
 import { CommonModule } from '@angular/common';
+import { ResponseSchema } from '../../../models/response.schema';
+import { User } from '../../../models/user';
+import { LicenceService } from '../../../services/licence.service';
 
 
 @Component({
@@ -15,7 +18,12 @@ import { CommonModule } from '@angular/common';
 })
 export class LicenceComponent implements OnInit, OnChanges {
   @Input() licence: Licence|undefined;
+  @Input() user: User|undefined;
+  @Output() takeLicenceEvent = new EventEmitter<{id:number, user:User}>();
+  @Output() returnLicenceEvent = new EventEmitter<{id:number}>();
   countdownConfig: any;
+
+  constructor(private service:LicenceService){}
 
   ngOnInit(): void {
     this.updateCountdownConfig();
@@ -33,4 +41,14 @@ export class LicenceComponent implements OnInit, OnChanges {
       this.countdownConfig = { leftTime: (endTime - Date.now()) / 1000 }; // Convert milliseconds to seconds
     }
   }
+
+  takeLicence(id:number, user:User){
+    this.takeLicenceEvent.emit({id, user});
+  }
+
+  returnLicence(id:number){
+    this.returnLicenceEvent.emit({id});
+  }
+
+  
 }
