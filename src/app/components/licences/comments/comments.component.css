@@ -1,0 +1,15 @@
+
+mat-card{
+    padding: 0% 2%;
+    background-color: #fdfbffbe;
+}
+mat-card-subtitle {
+    font-size: 0.9rem;
+    color: #b6b5b5d5;
+    margin-left: 16px;
+  }
+.logo{
+    background-image: url("../../../../../public/logo.png");
+    background-size: cover;
+
+}

@@ -1,6 +1,14 @@
-<!-- <mat-card> -->
-  <mat-card-header>
-    <h2>Licences</h2>
-  </mat-card-header>
-<app-licence *ngFor="let licence of data" [licence]="licence" [user]="user" (takeLicenceEvent)="takeLicence($event.id, $event.user)" (returnLicenceEvent)="returnLicence($event.id)"></app-licence>
-<!-- </mat-card> -->
+<app-comments [message]="message" [name]="user.name"></app-comments>
+
+<mat-card>
+<mat-card-header>
+  <h2>Licences</h2>
+</mat-card-header>
+<app-licence
+  *ngFor="let licence of data"
+  [licence]="licence"
+  [user]="user"
+  (takeLicenceEvent)="takeLicence($event.id, $event.user)"
+  (returnLicenceEvent)="returnLicence($event.id)"
+></app-licence>
+</mat-card>

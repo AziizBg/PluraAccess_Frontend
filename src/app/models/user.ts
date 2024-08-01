@@ -5,4 +5,5 @@ export interface User{
     name:string,
     sessions?:Session[],
     isStudying?:boolean,
+    isRequesting?:boolean
 }

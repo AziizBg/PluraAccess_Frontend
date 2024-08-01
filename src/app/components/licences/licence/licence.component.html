@@ -36,8 +36,8 @@
        <!--take licence  -->
       @else {
         @if(licence && user){
-      <mat-card-actions align="end" style="margin-top: -20px;">
-        <button mat-flat-button [disabled]="user.isStudying" (click)="takeLicence(licence.id, user)">Take Licence</button>
+      <mat-card-actions align="end" style="margin-top: -50px;">
+        <button mat-flat-button [disabled]="user.isStudying || user.isRequesting" (click)="takeLicence(licence.id, user)">Take Licence</button>
       </mat-card-actions>
       }}
     </div>

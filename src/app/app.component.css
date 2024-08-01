@@ -1,4 +1,14 @@
 mat-card{
-    margin: 2% 10%;
-    padding: 0% 2% 2% 2%;
+    margin: 0%;
+    padding: 3% 18%;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+.container{
+    background-image: url("../../public/background.png");
+    /* background-size: contain; */
+    background-position: center;
+    min-height: 120vh;
 }

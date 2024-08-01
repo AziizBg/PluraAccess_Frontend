@@ -19,3 +19,8 @@
     height: fit-content;
     background-color: white;
 }
+
+button{
+  font-size:  12px;
+  padding:  16px;
+}
