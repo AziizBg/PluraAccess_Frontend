@@ -6,11 +6,13 @@ mat-card{
 mat-card-subtitle {
     font-size: 0.9rem;
     margin-left: 16px;
-    font-weight: 100;
+    color:rgba(0, 0, 0, 0.6);
+    font-weight: 400;
   }
 .available{
     background-image: url("../../../../../public/available.png");
     background-size: cover;
+    /* margin-top: -10px; margin-bottom: 5px; */
 }
 .unavailable{
     background-image: url("../../../../../public/unavailable.png");
@@ -18,5 +20,9 @@ mat-card-subtitle {
 }
 .learning{
     background-image: url("../../../../../public/learning.png");
+    background-size: cover;
+}
+.sessions{
+    background-image: url("../../../../../public/sessions.png");
     background-size: cover;
 }

@@ -6,6 +6,8 @@ export interface Session{
     startTime:Date,
     endTime:Date,
     licence?:Licence,
-    user?:User
+    user?:User,
+    course?:string,
+    userNotes?:string,
     
 }

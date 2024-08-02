@@ -9,7 +9,7 @@ export class SessionService {
 
   constructor(private http:HttpClient) { }
 
-  getAll(){
-        return this.http.get<ResponseSchema>('https://localhost:7189/api/Session');
+  getAll(user_id:number){
+        return this.http.get<ResponseSchema>('https://localhost:7189/api/Session/user/'+user_id);
   }
 }

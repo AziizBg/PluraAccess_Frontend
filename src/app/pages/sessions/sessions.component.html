@@ -1,4 +1,8 @@
+<app-comments [comment]="comment"></app-comments>
+
 <mat-card>
-<p>sessions works!</p>
+  <mat-card-header>
+    <!-- <h2>Sessions</h2> -->
+  </mat-card-header>
+  <app-session   *ngFor="let session of data" [session_data]="session"></app-session>
 </mat-card>
-<iframe src="https://app.pluralsight.com/" ></iframe>

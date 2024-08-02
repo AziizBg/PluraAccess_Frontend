@@ -8,9 +8,10 @@ import { DataViewModule } from 'primeng/dataview';
 import { LicenceComponent } from '../../components/licences/licence/licence.component';
 import { User } from '../../models/user';
 import { CommentsComponent } from '../../components/licences/comments/comments.component';
-import { UserService } from '../../services/user.service';
+import {  UserService } from '../../services/user.service';
 import { Comment } from '../../models/comment';
 import { allComments } from '../../data/all-comments';
+
 
 
 @Component({
@@ -24,7 +25,6 @@ export class LicencesComponent implements OnInit {
   constructor(private licenceService: LicenceService, private userService: UserService) {}
   data: Licence[] = [];
   user:User={id:-1, name:""};
-  users:User[]=[];
   comment:Comment={title:"", subtitle:""}
 
   ngOnInit(): void {
@@ -49,10 +49,13 @@ export class LicencesComponent implements OnInit {
     });
   }
   LoadUsersData(){
-    this.userService.getAll().subscribe((item:ResponseSchema) => {
-      this.users = item.$values;
-      console.log('users:', this.users);
-      this.user = this.users[0];
+    this.userService.getUser().subscribe((item:any) => {      
+      this.user = {
+        id:item.id,
+        name: item.name
+      }
+      console.log('user:', this.user);
+
     })
   }
 

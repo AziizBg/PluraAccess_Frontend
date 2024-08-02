@@ -1,0 +1,31 @@
+<!-- <mat-card>
+    <mat-card-header>
+      <div style="width: 100%">
+      <mat-card-title>Edit Session</mat-card-title>
+      </div>
+    </mat-card-header>
+  </mat-card>
+   -->
+
+   <h2 mat-dialog-title>Edit Session</h2>
+   <mat-dialog-content >
+     <p></p>
+     <div style="display: flex; flex-direction: column;">
+     <mat-form-field appearance="outline">
+       <mat-label>Session Course</mat-label>
+       <!-- <input matInput *ngIf="session" [(ngModel)]="session.course"/> -->
+       <input matInput [(ngModel)]="form_data.course"/>
+
+     </mat-form-field>
+
+     <mat-form-field appearance="outline">
+        <mat-label>Textarea</mat-label>
+        <!-- <textarea matInput *ngIf="session" [(ngModel)]="session.userNotes"></textarea> -->
+        <input matInput [(ngModel)]="form_data.userNotes"/>
+      </mat-form-field>
+    </div>
+   </mat-dialog-content>
+   <mat-dialog-actions>
+     <button mat-button >Cancel</button>
+     <button mat-button  cdkFocusInitial>Save</button>
+   </mat-dialog-actions>

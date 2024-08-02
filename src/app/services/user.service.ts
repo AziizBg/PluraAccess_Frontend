@@ -9,7 +9,8 @@ export class UserService {
 
   constructor(private http:HttpClient) { }
 
-  getAll(){
-        return this.http.get<ResponseSchema>('https://localhost:7189/api/User');
+  getUser(){
+        return this.http.get('https://localhost:7189/api/User/'+USER_ID);
   }
 }
+export const USER_ID = 1;

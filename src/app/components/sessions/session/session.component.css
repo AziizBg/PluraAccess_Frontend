@@ -1,0 +1,21 @@
+mat-card-subtitle {
+  font-size: 0.9rem;
+  color: #757575d5;
+  margin-left: 16px;
+}
+
+mat-card {
+  margin-top: 20px;
+  height: fit-content;
+  padding: 5px 30px 5px 10px;
+  background-color: rgba(255, 255, 255, 0.452);
+}
+
+mat-card-title{
+    font-weight: 500;
+}
+
+button{
+  font-size:  12px;
+  padding:  16px;
+}

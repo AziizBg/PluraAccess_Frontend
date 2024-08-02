@@ -1,0 +1,35 @@
+<mat-card>
+  <mat-card-header>
+    <div style="width: 100%">
+      @if (session_data?.course) {
+      <mat-card-title>
+        {{ session_data?.course }}
+      </mat-card-title>
+
+      }@else {
+      <mat-card-title style="color: rgba(0, 0, 0, 0.5);"> Session Course </mat-card-title>
+
+      }
+
+      <div style="margin-top: -30px">
+        <mat-card-subtitle align="end">{{
+          getDate(session_data?.startTime)
+        }}</mat-card-subtitle>
+        <mat-card-subtitle align="end"
+          >{{ getTime(session_data?.startTime) }}-{{ getTime(session_data?.endTime) }}
+        </mat-card-subtitle>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-content style="margin-top: -10px">
+    <p style="margin-left: 2%; color: darkgray" *ngIf="!session_data?.userNotes">
+      No Session Notes
+    </p>
+    <p>
+      {{ session_data?.userNotes }}
+    </p>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-raised-button (click)="openDialog()">Edit Session</button>
+  </mat-card-actions>
+</mat-card>

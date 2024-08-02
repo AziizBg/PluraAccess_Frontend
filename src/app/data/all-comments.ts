@@ -30,5 +30,10 @@ export const allComments={
         subtitle:"The session will end automatically when the timer ends",
         class:"learning"
         // red
+    },
+    sessions:{
+        title: "My Sessions",
+        subtitle:"Here you can find all your sessions and add notes to keep track of your progress",
+        class:"sessions"
     }
 }
