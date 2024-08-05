@@ -19,3 +19,7 @@ button{
   font-size:  12px;
   padding:  16px;
 }
+.button{
+  margin-left: 10px;
+  /* background-color: blue; */
+}

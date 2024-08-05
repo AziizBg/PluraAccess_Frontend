@@ -4,7 +4,7 @@
   <mat-card-header>
     <!-- <h2>Sessions</h2> -->
   </mat-card-header>
-  <app-session   *ngFor="let session of data" [session_data]="session" (editSessionEvent)="editSession($event)"></app-session>
+  <app-session   *ngFor="let session of data" [session_data]="session" (editSessionEvent)="editSession($event)" (deleteSessionEvent)="deleteSession($event)"></app-session>
   <!--   (takeLicenceEvent)="takeLicence($event.id, $event.user)"
  -->
 </mat-card>

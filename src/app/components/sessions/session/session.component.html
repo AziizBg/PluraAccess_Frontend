@@ -30,6 +30,8 @@
     </p>
   </mat-card-content>
   <mat-card-actions align="end">
-    <button mat-raised-button (click)="openDialog()">Edit Session</button>
+    <button mat-raised-button *ngIf="session_data" (click)="deleteSession(session_data)" class="button" color="warn">Delete </button>
+    <button mat-raised-button (click)="openDialog()" class="button">Edit </button>
+
   </mat-card-actions>
 </mat-card>

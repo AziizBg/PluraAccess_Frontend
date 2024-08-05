@@ -20,4 +20,9 @@ export class SessionService {
     delete session.user;
     return this.http.put<ResponseSchema>('https://localhost:7189/api/Session/'+session.id, session);
   }
+
+  deleteSession(session:Session){
+    console.log('in sessions service');
+    return this.http.delete<ResponseSchema>('https://localhost:7189/api/Session/'+session.id);
+  }
 }

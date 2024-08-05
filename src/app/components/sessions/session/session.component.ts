@@ -25,6 +25,10 @@ export class SessionComponent {
   editSession(session: Session) {
     this.editSessionEvent.emit(session);
   }
+  @Output() deleteSessionEvent = new EventEmitter<Session>();
+  deleteSession(session: Session) {
+    this.deleteSessionEvent.emit(session);
+  }
   readonly dialog = inject(MatDialog);
   openDialog() {
     const dialogRef = this.dialog.open(SessionFormComponent, {
