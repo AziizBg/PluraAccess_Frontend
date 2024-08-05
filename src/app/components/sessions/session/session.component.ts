@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common';
 })
 export class SessionComponent {
   @Input() session_data: Session | undefined;
+
   @Output() editSessionEvent = new EventEmitter<Session>();
   editSession(session: Session) {
     this.editSessionEvent.emit(session);
@@ -29,6 +30,8 @@ export class SessionComponent {
   deleteSession(session: Session) {
     this.deleteSessionEvent.emit(session);
   }
+
+
   readonly dialog = inject(MatDialog);
   openDialog() {
     const dialogRef = this.dialog.open(SessionFormComponent, {
@@ -37,6 +40,7 @@ export class SessionComponent {
       },
       width: '500px',
     });
+    
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       console.log("result:", result);

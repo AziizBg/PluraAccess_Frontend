@@ -28,7 +28,6 @@ export class SessionsComponent implements OnInit {
   }
   LoadInitialData() {
     console.log('user id:', USER_ID);
-
     this.service.getAll(USER_ID).subscribe((item: ResponseSchema) => {
       this.data = item.$values.sort(
         (a, b) => new Date(b.endTime).getTime() - new Date(a.endTime).getTime()
