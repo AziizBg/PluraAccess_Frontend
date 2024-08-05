@@ -1,4 +1,11 @@
-import { Component, OnInit, inject, model } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  inject,
+  model,
+} from '@angular/core';
 import { MaterialModule } from '../../../../module/Material.Module';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -15,11 +22,15 @@ import { Session } from '../../../models/session';
 export class SessionFormComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<SessionFormComponent>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-  session: Session|undefined;
-  form_data: {course:string, userNotes:string}={course:"", userNotes:""}
+  form_data: { course: string; userNotes: string } = {
+    course: '',
+    userNotes: '',
+  };
   ngOnInit(): void {
-    console.log("data:" ,this.data);
-    this.session=this.data.session;
+    console.log('data:', this.data);
+    this.form_data = this.data.form_data;
   }
-
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }

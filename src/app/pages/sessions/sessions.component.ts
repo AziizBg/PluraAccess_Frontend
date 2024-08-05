@@ -34,4 +34,11 @@ export class SessionsComponent implements OnInit {
       console.log(this.data);
     });
   }
+  editSession(session:Session){
+    console.log("edit session:", session);
+    this.service.editSession(session).subscribe((item:ResponseSchema)=>{
+      console.log("item:", item);      
+      this.LoadInitialData();
+    });
+  }
 }

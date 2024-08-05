@@ -11,6 +11,7 @@ import { CommentsComponent } from '../../components/licences/comments/comments.c
 import {  UserService } from '../../services/user.service';
 import { Comment } from '../../models/comment';
 import { allComments } from '../../data/all-comments';
+import { Router } from '@angular/router';
 
 
 
@@ -22,7 +23,7 @@ import { allComments } from '../../data/all-comments';
   styleUrl: './licences.component.css',
 })
 export class LicencesComponent implements OnInit {
-  constructor(private licenceService: LicenceService, private userService: UserService) {}
+  constructor(private licenceService: LicenceService, private userService: UserService, private router:Router) {}
   data: Licence[] = [];
   user:User={id:-1, name:""};
   comment:Comment={title:"", subtitle:""}
@@ -76,6 +77,7 @@ export class LicencesComponent implements OnInit {
       this.user.isStudying=false;
       this.LoadSessionsData();
       console.log("item: ",item);
+      this.router.navigate(['/sessions']);
     })
   }
   checkUserStudying(){
