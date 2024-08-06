@@ -1,29 +1,21 @@
-<!-- <mat-card>
-    <mat-card-header>
-      <div style="width: 100%">
-      <mat-card-title>Edit Session</mat-card-title>
-      </div>
-    </mat-card-header>
-  </mat-card>
-   -->
+<h2 mat-dialog-title>Edit Session</h2>
+<mat-dialog-content>
+  <p></p>
+  <div style="display: flex; flex-direction: column">
+    <mat-form-field appearance="outline">
+      <mat-label>Session Course</mat-label>
+      <input matInput [(ngModel)]="form_data.course" />
+    </mat-form-field>
 
-   <h2 mat-dialog-title>Edit Session</h2>
-   <mat-dialog-content >
-     <p></p>
-     <div style="display: flex; flex-direction: column;">
-     <mat-form-field appearance="outline">
-       <mat-label>Session Course</mat-label>
-       <input matInput [(ngModel)]="form_data.course"/>
-
-     </mat-form-field>
-
-     <mat-form-field appearance="outline">
-        <mat-label>Session Notes</mat-label>
-        <input matInput [(ngModel)]="form_data.userNotes"/>
-      </mat-form-field>
-    </div>
-   </mat-dialog-content>
-   <mat-dialog-actions>
-     <button mat-button (click)="onNoClick()" >Cancel</button>
-     <button mat-button [mat-dialog-close]="form_data" cdkFocusInitial>Save</button>
-   </mat-dialog-actions>
+    <mat-form-field appearance="outline">
+      <mat-label>Session Notes</mat-label>
+      <input matInput [(ngModel)]="form_data.userNotes" />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="form_data" cdkFocusInitial>
+    Save
+  </button>
+</mat-dialog-actions>
