@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^18.1.0",
     "@angular/platform-browser-dynamic": "^18.1.0",
     "@angular/router": "^18.1.0",
+    "ngx-cookie-service": "^18.0.0",
     "ngx-countdown": "^18.0.0",
     "primeng": "^17.18.6",
     "rxjs": "~7.8.0",
