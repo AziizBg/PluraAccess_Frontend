@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CountdownModule } from 'ngx-countdown';
 import { Licence } from '../../../models/licence';
 import { CommonModule } from '@angular/common';
@@ -12,7 +13,7 @@ import { LicenceService } from '../../../services/licence.service';
 @Component({
   selector: 'app-licence',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, CountdownModule, CommonModule],
+  imports: [MatCardModule, MatButtonModule, CountdownModule, CommonModule, MatProgressSpinnerModule],
   templateUrl: './licence.component.html',
   styleUrl: './licence.component.css'
 })

@@ -2,7 +2,8 @@
   <mat-card-header>
     <div style="width: 100%">
       <div style="display: flex; gap: 20px">
-        <div mat-card-avatar [ngClass]="licence?.currentSession ? 'taken-image' : 'available-image'"></div>
+        <div mat-card-avatar *ngIf="!licence?.currentSession" ngClass= 'available-image'></div>
+        <mat-spinner color="warn" style="margin: 10px;" [diameter]="40"  *ngIf="licence?.currentSession"></mat-spinner>
         <div>
           <!-- card title: licence number -->
           <mat-card-title>Licence n°{{ licence?.id }}</mat-card-title>
@@ -12,6 +13,9 @@
             @if (licence?.currentSession) { Taken by {{
               licence?.currentSession?.user?.name
             }}
+            <br>
+            <countdown #cd [config]="countdownConfig"></countdown>        
+
             }
             @else {
               Available
@@ -20,17 +24,12 @@
         </div>
       </div>
 
-      <!-- timer and return licence -->
-      @if (licence?.currentSession) {
-      <mat-card-subtitle>
-        <mat-card-actions align="start">
-          <countdown #cd [config]="countdownConfig"></countdown>        
+      <!-- return licence -->
+      @if(licence?.currentSession?.user?.id == user?.id){
+        <mat-card-subtitle>
+        <mat-card-actions align="end" style="margin-top: -30px;">
+          <button color="warn" *ngIf="licence" mat-raised-button (click)="returnLicence(licence.id)">Return Licence</button>
         </mat-card-actions>
-        @if(licence?.currentSession?.user?.id == user?.id){
-        <mat-card-actions align="end" style="margin-top: -50px;">
-          <button *ngIf="licence" mat-raised-button (click)="returnLicence(licence.id)">Return Licence</button>
-        </mat-card-actions>
-      }
       </mat-card-subtitle>
       }
        <!--take licence  -->
