@@ -25,7 +25,9 @@ export class LicenceService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.post<ResponseSchema>('https://localhost:7189/api/Licence/'+id+"/take", {UserId:user.id, NgorkUrl:this.ngrokUrl}, {headers})
+    return this.http.post<ResponseSchema>('https://localhost:7189/api/Licence/'+id+'/take', {UserId:user.id
+    // , NgorkUrl:this.ngrokUrl
+  }, {headers})
   }
   
   returnLicence(id:number){

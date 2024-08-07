@@ -7,6 +7,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
       Authorization:"bearer "+ token
     }
   });
-  console.log("sending request", auth_req.method, " ", auth_req.url);
+  console.log("sending request", auth_req.method, " ", auth_req.urlWithParams);
+  
   return next(auth_req);
 };

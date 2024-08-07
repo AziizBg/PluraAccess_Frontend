@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ResponseSchema } from '../models/response.schema';
 import { Session } from '../models/session';
+import { PaginationDto } from '../models/pagination';
+import { PaginatedResponseSchema } from '../models/paginated-response.schema';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,14 @@ export class SessionService {
 
   constructor(private http:HttpClient) { }
 
-  getAll(user_id:number){
-        return this.http.get<ResponseSchema>('https://localhost:7189/api/Session/user/'+user_id);
+  getAll(user_id:number, pagination:PaginationDto){
+    let params = new HttpParams();
+
+    // Check if pageIndex is not null or undefined
+    params = pagination.pageIndex != null ? params.set('pageIndex', pagination.pageIndex) : params;
+    params = pagination.pageSize != null ? params.set('pageSize', pagination.pageSize) : params;
+
+    return this.http.get<PaginatedResponseSchema>('https://localhost:7189/api/Session/user/'+user_id, {params});
   }
 
   editSession(session:Session){

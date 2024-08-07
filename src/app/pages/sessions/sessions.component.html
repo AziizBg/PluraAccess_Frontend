@@ -1,13 +1,20 @@
 <app-comments [comment]="comment"></app-comments>
 
 <mat-card>
-  <mat-card-header>
-  </mat-card-header>
+  <mat-card-header> </mat-card-header>
   <app-session
     *ngFor="let session of data"
     [session_data]="session"
     (editSessionEvent)="editSession($event)"
     (deleteSessionEvent)="deleteSession($event)"
   ></app-session>
-
+  <mat-paginator
+    (page)="change($event)"
+    [length]="length"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[3, 5, 10, 15]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
 </mat-card>

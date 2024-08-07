@@ -9,6 +9,9 @@ import { Comment } from '../../models/comment';
 import { allComments } from '../../data/all-comments';
 import { SessionComponent } from '../../components/sessions/session/session.component';
 import { CommonModule } from '@angular/common';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginationDto } from '../../models/pagination';
+import { PaginatedResponseSchema } from '../../models/paginated-response.schema';
 
 @Component({
   selector: 'app-sessions',
@@ -18,38 +21,45 @@ import { CommonModule } from '@angular/common';
   styleUrl: './sessions.component.css',
 })
 export class SessionsComponent implements OnInit {
+  length: number = 10;
+  pageIndex: number = 0;
+  pageSize: number = 3;
   constructor(private service: SessionService) {}
   data: Session[] = [];
 
   comment: Comment = allComments.sessions;
 
   ngOnInit(): void {
-    this.LoadInitialData();
+    this.LoadData({ pageIndex: this.pageIndex, pageSize: this.pageSize });
   }
-  LoadInitialData() {
-    console.log('user id:', USER_ID);
-    this.service.getAll(USER_ID).subscribe((item: ResponseSchema) => {
-      this.data = item.$values.sort(
-        (a, b) => new Date(b.endTime).getTime() - new Date(a.endTime).getTime()
-      );
-      console.log(this.data);
-    });
+  LoadData(pagination: PaginationDto) {
+    this.pageSize = pagination.pageSize ? pagination.pageSize : this.pageSize;
+    this.pageIndex = pagination.pageIndex
+      ? pagination.pageIndex
+      : this.pageIndex;
+    this.service
+      .getAll(USER_ID, pagination)
+      .subscribe((item: PaginatedResponseSchema) => {
+        this.data = item.items.$values;
+        this.length = item.length;
+        console.log(this.data);
+      });
   }
   editSession(session: Session) {
-    console.log('edit session:', session);
     this.service.editSession(session).subscribe((item: ResponseSchema) => {
-      console.log('item:', item);
-      this.LoadInitialData();
+      this.LoadData({ pageIndex: this.pageIndex, pageSize: this.pageSize });
     });
   }
 
   deleteSession(session: Session) {
     if (window.confirm('Do you want to delete the session?')) {
-      console.log('delete session:', session);
       this.service.deleteSession(session).subscribe((item: ResponseSchema) => {
-        console.log('item:', item);
-        this.LoadInitialData();
+        this.LoadData({ pageIndex: this.pageIndex, pageSize: this.pageSize });
       });
     }
+  }
+
+  change(event: PageEvent) {
+    this.LoadData({ pageIndex: event.pageIndex, pageSize: event.pageSize });
   }
 }
