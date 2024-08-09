@@ -1,16 +1,14 @@
 <mat-card>
   <mat-card-header>
     <div style="width: 100%">
+      <!-- session course (title) -->
       @if (session_data?.course) {
       <mat-card-title>
         {{ session_data?.course }}
       </mat-card-title>
+      }@else {<mat-card-title style="color: rgba(0, 0, 0, 0.5);"> Session Course </mat-card-title>}
 
-      }@else {
-      <mat-card-title style="color: rgba(0, 0, 0, 0.5);"> Session Course </mat-card-title>
-
-      }
-
+      <!-- session date/time -->
       <div style="margin-top: -30px">
         <mat-card-subtitle align="end">{{
           getDate(session_data?.startTime)
@@ -21,14 +19,19 @@
       </div>
     </div>
   </mat-card-header>
+
+
+    <!-- session notes -->
   <mat-card-content style="margin-top: -10px">
     <p style="margin-left: 2%; color: darkgray" *ngIf="!session_data?.userNotes">
       No Session Notes
     </p>
-    <p>
+    <p style="margin-bottom: 16px;">
       {{ session_data?.userNotes }}
     </p>
   </mat-card-content>
+
+  <!-- edit, delete buttons -->
   <mat-card-actions align="end">
     <button mat-raised-button *ngIf="session_data" (click)="deleteSession(session_data)" class="button" color="warn">Delete </button>
     <button mat-raised-button (click)="openDialog()" class="button">Edit </button>
