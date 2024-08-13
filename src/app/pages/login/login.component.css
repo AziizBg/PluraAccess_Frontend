@@ -1,0 +1,14 @@
+
+mat-card{
+    margin: 2% 0% ;
+    padding: 0% 2% 2% 2%;
+    background-color: #fdfbffe4;
+
+}
+mat-card-subtitle {
+    font-size: 0.9rem;
+    margin-left: 16px;
+    color:rgba(0, 0, 0, 0.6);
+    font-weight: 400;
+  }
+

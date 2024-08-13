@@ -1,16 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ResponseSchema } from '../models/response.schema';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
 
-  constructor(private http:HttpClient) { }
-
-  getUser(){
-        return this.http.get('https://localhost:7189/api/User/'+USER_ID);
+  getUser() {
+    const id = this.cookieService.get('id');
+    return this.http.get('https://localhost:7189/api/User/' + id);
   }
 }
-export const USER_ID = 1;
+

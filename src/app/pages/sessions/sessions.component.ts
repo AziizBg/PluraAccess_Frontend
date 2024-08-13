@@ -3,7 +3,6 @@ import { ResponseSchema } from '../../models/response.schema';
 import { SessionService } from '../../services/sessions.service';
 import { Session } from '../../models/session';
 import { MaterialModule } from '../../../module/Material.Module';
-import { USER_ID } from '../../services/user.service';
 import { CommentsComponent } from '../../components/licences/comments/comments.component';
 import { Comment } from '../../models/comment';
 import { allComments } from '../../data/all-comments';
@@ -12,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
 import { PaginationDto } from '../../models/pagination';
 import { PaginatedResponseSchema } from '../../models/paginated-response.schema';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-sessions',
@@ -24,7 +24,7 @@ export class SessionsComponent implements OnInit {
   length: number = 10;
   pageIndex: number = 0;
   pageSize: number = 3;
-  constructor(private service: SessionService) {}
+  constructor(private service: SessionService, private cookieService: CookieService) {}
   data: Session[] = [];
 
   comment: Comment = allComments.sessions;
@@ -33,12 +33,13 @@ export class SessionsComponent implements OnInit {
     this.LoadData({ pageIndex: this.pageIndex, pageSize: this.pageSize });
   }
   LoadData(pagination: PaginationDto) {
+    const id = Number(this.cookieService.get('id'));
     this.pageSize = pagination.pageSize ? pagination.pageSize : this.pageSize;
     this.pageIndex = pagination.pageIndex
       ? pagination.pageIndex
       : this.pageIndex;
     this.service
-      .getAll(USER_ID, pagination)
+      .getAll(id, pagination)
       .subscribe((item: PaginatedResponseSchema) => {
         this.data = item.items.$values;
         this.length = item.length;

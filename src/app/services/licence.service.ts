@@ -31,7 +31,7 @@ export class LicenceService {
   }
   
   returnLicence(id:number){
-    return this.http.get<ResponseSchema>('https://localhost:7189/api/Licence/'+id+"/return");
+    return this.http.post<ResponseSchema>('https://localhost:7189/api/Licence/'+id+"/return", {isBrowserClosed:false});
 
   }
 }

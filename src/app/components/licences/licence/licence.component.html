@@ -2,41 +2,58 @@
   <mat-card-header>
     <div style="width: 100%">
       <div style="display: flex; gap: 20px">
-        <div mat-card-avatar *ngIf="!licence?.currentSession" ngClass= 'available-image'></div>
-        <mat-spinner color="warn" style="margin: 10px;" [diameter]="40"  *ngIf="licence?.currentSession"></mat-spinner>
+        <div
+          mat-card-avatar
+          *ngIf="!licence?.currentSession"
+          ngClass="available-image"
+        ></div>
+        <mat-spinner
+          color="warn"
+          style="margin: 10px"
+          [diameter]="40"
+          *ngIf="licence?.currentSession"
+        ></mat-spinner>
         <div>
           <!-- card title: licence number -->
           <mat-card-title>Licence n°{{ licence?.id }}</mat-card-title>
 
           <!-- taken by or available -->
           <mat-card-subtitle>
-            @if (licence?.currentSession) { Taken by {{
-              licence?.currentSession?.user?.name
-            }}
-            <br>
-            <countdown #cd [config]="countdownConfig"></countdown>        
+            @if (licence?.currentSession) { Taken by
+            {{ licence?.currentSession?.user?.name }}
+            <br />
+            <countdown #cd [config]="countdownConfig"></countdown>
 
-            }
-            @else {
-              Available
-            }
+            } @else { Available }
           </mat-card-subtitle>
         </div>
       </div>
 
       <!-- return licence -->
       @if(licence?.currentSession?.user?.id == user?.id){
-        <mat-card-subtitle>
-        <mat-card-actions align="end" style="margin-top: -30px;">
-          <button color="warn" *ngIf="licence" mat-raised-button (click)="returnLicence(licence.id)">Return Licence</button>
+      <mat-card-subtitle>
+        <mat-card-actions align="end" style="margin-top: -30px">
+          <button
+            color="warn"
+            *ngIf="licence"
+            mat-raised-button
+            (click)="returnLicence(licence.id)"
+          >
+            Return Licence
+          </button>
         </mat-card-actions>
       </mat-card-subtitle>
       }
-       <!--take licence  -->
-      @else {
-        @if(licence && user){
-      <mat-card-actions align="end" style="margin-top: -50px;">
-        <button mat-flat-button [disabled]="user.isStudying || user.isRequesting" (click)="takeLicence(licence.id, user)">Take Licence</button>
+      <!--take licence  -->
+      @else { @if(licence && user){
+      <mat-card-actions align="end" style="margin-top: -50px">
+        <button
+          mat-flat-button
+          [disabled]="user.isStudying || user.isRequesting|| licence.currentSession"
+          (click)="takeLicence(licence.id, user)"
+        >
+          Take Licence
+        </button>
       </mat-card-actions>
       }}
     </div>
