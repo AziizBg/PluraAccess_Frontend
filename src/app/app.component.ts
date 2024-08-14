@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   constructor(
     private cookieService: CookieService,
     private router: Router,
-    private singlarService: SignalrService,
+    private singlarService: SignalrService
   ) {
     this.router.events.subscribe(() => {
       this.checkRoute();

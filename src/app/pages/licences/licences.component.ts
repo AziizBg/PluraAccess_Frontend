@@ -14,6 +14,7 @@ import { allComments } from '../../data/all-comments';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-licences',
@@ -31,22 +32,23 @@ import { Subscription } from 'rxjs';
 export class LicencesComponent implements OnInit, OnDestroy {
   data: Licence[] = [];
   user: User = { id: -1, name: '' };
-  comment: Comment = { title: '', subtitle: '' };
+  comment: Comment = allComments.fetching;
   private notificationSubscription: Subscription = new Subscription(); // to manage notification subscription lifecycle
 
   constructor(
     private licenceService: LicenceService,
     private userService: UserService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.LoadUsersData();
     this.LoadLicencesData();
     this.notificationSubscription =
-      this.notificationService.notification$.subscribe((notification) => {
-        console.log(notification);
+      this.notificationService.notification$.subscribe((notification:Notification) => {
+        // if()
         this.LoadUsersData();
         this.LoadLicencesData();
       });
@@ -89,7 +91,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
         this.user.isRequesting = false;
         this.comment = allComments.learning;
         this.LoadLicencesData();
-        console.log('item: ', item);
+        this.toastr.success('Licence Taken. Learn well !', '');
       });
   }
   returnLicence(id: number) {
@@ -99,6 +101,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.LoadLicencesData();
       console.log('item: ', item);
       this.router.navigate(['/sessions']);
+      this.toastr.warning('Licence Returned. Go add your session notes', '');
     });
   }
   checkUserStudying() {

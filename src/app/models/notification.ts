@@ -1,3 +1,6 @@
-export class Notification {
-
+export interface Notification {
+    title:string;
+    message:string;
+    createdAt:Date;
+    userId: number;
 }
