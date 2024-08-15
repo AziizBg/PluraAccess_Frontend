@@ -19,12 +19,15 @@
 
           <!-- taken by or available -->
           <mat-card-subtitle>
-            @if (licence?.currentSession) { Taken by
+            @if (licence?.currentSession) {
+            @if(licence?.currentSession?.user?.name){ Taken by
             {{ licence?.currentSession?.user?.name }}
+            }@else{Being Requested}
             <br />
-            <countdown #cd [config]="countdownConfig"></countdown>
-
-            } @else { Available }
+            <!-- timer -->
+            @if(licence?.currentSession?.user?.name){
+            <countdown #cd [config]="countdownConfig"></countdown>} } @else {
+            Available }
           </mat-card-subtitle>
         </div>
       </div>
@@ -49,7 +52,9 @@
       <mat-card-actions align="end" style="margin-top: -50px">
         <button
           mat-flat-button
-          [disabled]="user.isStudying || user.isRequesting|| licence.currentSession"
+          [disabled]="
+            user.isStudying || user.isRequesting || licence.currentSession
+          "
           (click)="takeLicence(licence.id, user)"
         >
           Take Licence

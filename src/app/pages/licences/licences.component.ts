@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Notification } from '../../models/notification';
 
 @Component({
   selector: 'app-licences',
@@ -47,52 +48,60 @@ export class LicencesComponent implements OnInit, OnDestroy {
     this.LoadUsersData();
     this.LoadLicencesData();
     this.notificationSubscription =
-      this.notificationService.notification$.subscribe((notification:Notification) => {
-        // if()
-        this.LoadUsersData();
-        this.LoadLicencesData();
-      });
+      this.notificationService.notification$.subscribe(
+        (notification: Notification) => {
+          if (
+            notification.userId != this.user.id &&
+            notification.title != 'Licence Request Failed'
+          )
+            this.toastr.info(notification.message);
+          // if (
+          //   notification.userId != this.user.id ||
+          //   notification.title != 'Licence Requested'
+          // )
+            this.LoadLicencesData();
+        }
+      );
   }
-
   ngOnDestroy(): void {
     this.notificationSubscription.unsubscribe();
   }
-
   LoadLicencesData() {
     this.licenceService.getAll().subscribe((item: ResponseSchema) => {
       this.data = item.$values;
-      console.log('data:', this.data);
       this.checkUserStudying();
-      if (this.user.isStudying) this.comment = allComments.learning;
-      else {
-        if (this.data.filter((licence) => !licence.currentSession).length > 0)
-          this.comment = allComments.available;
-        else this.comment = allComments.unavailable;
-      }
+      if (this.data.filter((licence) => !licence.currentSession).length > 0)
+        this.comment = allComments.available;
+      else this.comment = allComments.unavailable;
     });
   }
+  
   LoadUsersData() {
     this.userService.getUser().subscribe((item: any) => {
       this.user = {
         id: item.id,
         name: item.name,
       };
-      console.log('user:', this.user);
     });
   }
 
   takeLicence(id: number, user: User) {
-    this.comment = allComments.requesting;
+    // this.comment = allComments.requesting;
     this.user.isRequesting = true;
-    this.licenceService
-      .takeLicence(id, user)
-      .subscribe((item: ResponseSchema) => {
+    this.licenceService.takeLicence(id, user).subscribe(
+      (item: ResponseSchema) => {
         this.user.isStudying = true;
         this.user.isRequesting = false;
         this.comment = allComments.learning;
         this.LoadLicencesData();
         this.toastr.success('Licence Taken. Learn well !', '');
-      });
+      },
+      (error) => {
+        this.toastr.error('Licence Request Failed', '');
+        this.LoadLicencesData();
+        this.LoadUsersData();
+      }
+    );
   }
   returnLicence(id: number) {
     this.comment = allComments.returning;
@@ -101,13 +110,17 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.LoadLicencesData();
       console.log('item: ', item);
       this.router.navigate(['/sessions']);
-      this.toastr.warning('Licence Returned. Go add your session notes', '');
+      this.toastr.warning("Don't forget to add the session title and notes ");
+      this.toastr.success('Licence Returned!', '');
     });
   }
   checkUserStudying() {
     const userSessions = this.data
       .filter((licence) => licence.currentSession)
       .filter((licence) => licence.currentSession?.user?.id == this.user.id);
-    if (userSessions.length > 0) this.user.isStudying = true;
+    if (userSessions.length > 0) {
+      this.user.isStudying = true;
+      this.comment = allComments.learning;
+    }
   }
 }
