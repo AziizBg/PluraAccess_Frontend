@@ -10,5 +10,15 @@
       <mat-card-title>{{ comment?.title }}</mat-card-title>
       <mat-card-subtitle>{{comment?.subtitle}}</mat-card-subtitle>
     </div>
+    @if(comment==allcomments.unavailable){
+    <mat-card-actions align="end" style=" width: fit-content">
+      <button
+      style="background-color:#3c715d; width: 135px"
+        mat-flat-button
+      >
+        Book Licence
+      </button>
+    </mat-card-actions>
+  }
   </mat-card-header>
 </mat-card>

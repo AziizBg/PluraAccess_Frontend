@@ -8,7 +8,7 @@ export const allComments = {
     // green
   },
   unavailable: {
-    title: 'No licence available :(',
+    title: 'No licence available',
     subtitle: 'You can book a licence and be added to the queue',
     class: 'unavailable',
     // black

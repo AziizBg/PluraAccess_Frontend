@@ -59,7 +59,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
           //   notification.userId != this.user.id ||
           //   notification.title != 'Licence Requested'
           // )
-            this.LoadLicencesData();
+          this.LoadLicencesData();
         }
       );
   }
@@ -70,12 +70,14 @@ export class LicencesComponent implements OnInit, OnDestroy {
     this.licenceService.getAll().subscribe((item: ResponseSchema) => {
       this.data = item.$values;
       this.checkUserStudying();
-      if (this.data.filter((licence) => !licence.currentSession).length > 0)
-        this.comment = allComments.available;
-      else this.comment = allComments.unavailable;
+      if (!this.user.isStudying) {
+        if (this.data.filter((licence) => !licence.currentSession).length > 0)
+          this.comment = allComments.available;
+        else this.comment = allComments.unavailable;
+      }
     });
   }
-  
+
   LoadUsersData() {
     this.userService.getUser().subscribe((item: any) => {
       this.user = {
