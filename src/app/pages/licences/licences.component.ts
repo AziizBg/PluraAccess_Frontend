@@ -53,12 +53,9 @@ export class LicencesComponent implements OnInit, OnDestroy {
           if (
             notification.userId != this.user.id &&
             notification.title != 'Licence Request Failed'
-          )
+          ) {
             this.toastr.info(notification.message);
-          // if (
-          //   notification.userId != this.user.id ||
-          //   notification.title != 'Licence Requested'
-          // )
+          }
           this.LoadLicencesData();
         }
       );
@@ -69,7 +66,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
   LoadLicencesData() {
     this.licenceService.getAll().subscribe((item: ResponseSchema) => {
       this.data = item.$values;
-      this.checkUserStudying();
+      this.checkUserState();
       if (!this.user.isStudying) {
         if (this.data.filter((licence) => !licence.currentSession).length > 0)
           this.comment = allComments.available;
@@ -116,7 +113,21 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.toastr.success('Licence Returned!', '');
     });
   }
-  checkUserStudying() {
+  bookLicence() {
+    this.comment = allComments.booked;
+    this.licenceService.bookLicence(this.user).subscribe((position: number) => {
+      this.toastr.success('Added to the queue!', '');
+      console.log(position);
+      this.user.queuePosition = position;
+    });
+  }
+  cancelBookLicence() {
+    this.licenceService.cancelBookLicence(this.user).subscribe((response:any)=>{
+      this.LoadLicencesData();
+      this.toastr.info('Booking Canceled')
+    })
+  }
+  checkUserState() {
     const userSessions = this.data
       .filter((licence) => licence.currentSession)
       .filter((licence) => licence.currentSession?.user?.id == this.user.id);
@@ -124,5 +135,13 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.user.isStudying = true;
       this.comment = allComments.learning;
     }
+    const position = this.licenceService
+      .getPosition(this.user)
+      .subscribe((position: number) => {
+        if (position) {
+          this.user.queuePosition = position;
+          this.comment = allComments.booked;
+        }
+      });
   }
 }

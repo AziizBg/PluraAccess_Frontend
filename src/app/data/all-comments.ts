@@ -37,6 +37,12 @@ export const allComments = {
     class: 'unavailable',
     // black
   },
+  booked: {
+    title: 'Position in the waiting queue: ',
+    subtitle: 'Maxiumum estimated waiting time:',
+    class: 'unavailable',
+    // black
+  },
   sessions: {
     title: 'My Sessions',
     subtitle:

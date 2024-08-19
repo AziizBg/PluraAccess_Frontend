@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MaterialModule } from '../../../../module/Material.Module';
 import { CommonModule } from '@angular/common';
 import { Comment } from '../../../models/comment';
 import { allComments } from '../../../data/all-comments';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-comments',
@@ -13,9 +14,18 @@ import { allComments } from '../../../data/all-comments';
 })
 export class CommentsComponent {
   @Input()
-  name:string|undefined;
+  user:User|undefined;
   @Input()
   comment:Comment|undefined;
-  allcomments = allComments;
+  @Output() bookLicenceEvent = new EventEmitter();
+  @Output() cancelBookLicenceEvent = new EventEmitter();
 
+
+  allcomments = allComments;
+  bookLicence(){
+    this.bookLicenceEvent.emit();
+  }
+  cancelBookLicence(){
+    this.cancelBookLicenceEvent.emit();
+  }
 }

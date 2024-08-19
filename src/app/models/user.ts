@@ -5,5 +5,6 @@ export interface User{
     name:string,
     sessions?:Session[],
     isStudying?:boolean,
-    isRequesting?:boolean
+    isRequesting?:boolean,
+    queuePosition?:number,
 }
