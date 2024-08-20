@@ -9,8 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class UserService {
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
-  getUser() {
-    const id = this.cookieService.get('id');
+  getUser(id:number) {
     return this.http.get('https://localhost:7189/api/User/' + id);
   }
 }

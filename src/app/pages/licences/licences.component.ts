@@ -16,6 +16,7 @@ import { NotificationService } from '../../services/notification.service';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Notification } from '../../models/notification';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-licences',
@@ -41,7 +42,8 @@ export class LicencesComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private notificationService: NotificationService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cookieService:CookieService
   ) {}
 
   ngOnInit(): void {
@@ -50,13 +52,22 @@ export class LicencesComponent implements OnInit, OnDestroy {
     this.notificationSubscription =
       this.notificationService.notification$.subscribe(
         (notification: Notification) => {
+          console.log('notification:', notification);
           if (
             notification.userId != this.user.id &&
+            notification.title != 'Queue' &&
             notification.title != 'Licence Request Failed'
           ) {
             this.toastr.info(notification.message);
           }
+          if (
+            notification.userId == this.user.id &&
+            notification.title == 'Queue'
+          )
+            this.toastr.success(notification.message);
+
           this.LoadLicencesData();
+          this.LoadQueuePosition();
         }
       );
   }
@@ -67,16 +78,20 @@ export class LicencesComponent implements OnInit, OnDestroy {
     this.licenceService.getAll().subscribe((item: ResponseSchema) => {
       this.data = item.$values;
       this.checkUserState();
-      if (!this.user.isStudying) {
-        if (this.data.filter((licence) => !licence.currentSession).length > 0)
-          this.comment = allComments.available;
-        else this.comment = allComments.unavailable;
+    });
+  }
+  LoadQueuePosition() {
+    this.licenceService.getPosition(this.user).subscribe((position: number) => {
+      if (position) {
+        alert(position);
+        this.user.queuePosition = position;
       }
     });
   }
 
   LoadUsersData() {
-    this.userService.getUser().subscribe((item: any) => {
+    this.user.id=+this.cookieService.get("id");
+    this.userService.getUser(this.user.id).subscribe((item: any) => {
       this.user = {
         id: item.id,
         name: item.name,
@@ -122,26 +137,35 @@ export class LicencesComponent implements OnInit, OnDestroy {
     });
   }
   cancelBookLicence() {
-    this.licenceService.cancelBookLicence(this.user).subscribe((response:any)=>{
-      this.LoadLicencesData();
-      this.toastr.info('Booking Canceled')
-    })
+    this.licenceService
+      .cancelBookLicence(this.user)
+      .subscribe((response: any) => {
+        this.LoadLicencesData();
+        this.toastr.info('Booking Canceled');
+      });
   }
   checkUserState() {
+    //check if user is learning
     const userSessions = this.data
       .filter((licence) => licence.currentSession)
       .filter((licence) => licence.currentSession?.user?.id == this.user.id);
     if (userSessions.length > 0) {
       this.user.isStudying = true;
       this.comment = allComments.learning;
+      return;
     }
-    const position = this.licenceService
-      .getPosition(this.user)
-      .subscribe((position: number) => {
-        if (position) {
-          this.user.queuePosition = position;
-          this.comment = allComments.booked;
-        }
-      });
+
+    // check if user is in queue
+    this.licenceService.getPosition(this.user).subscribe((position: number) => {
+      if (position) {
+        this.user.queuePosition = position;
+        this.comment = allComments.booked;
+      } else {
+        //check if licences are available
+        if (this.data.filter((licence) => !licence.currentSession).length > 0)
+          this.comment = allComments.available;
+        else this.comment = allComments.unavailable;
+      }
+    });
   }
 }

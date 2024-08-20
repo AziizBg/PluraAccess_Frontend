@@ -38,8 +38,8 @@ export const allComments = {
     // black
   },
   booked: {
-    title: 'Position in the waiting queue: ',
-    subtitle: 'Maxiumum estimated waiting time:',
+    title: 'Position in the queue: ',
+    subtitle: "We'll notify you when it's your turn to take the first returned licence",
     class: 'unavailable',
     // black
   },
