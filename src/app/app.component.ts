@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
         this.cookieService.get('ngrokUrl')
       );
     }
-    this.singlarService.startConnection();
+    this.singlarService.startConnection( +this.cookieService.get('id'));
     this.singlarService.addListener();
   }
 }

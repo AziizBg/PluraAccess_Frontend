@@ -55,13 +55,13 @@ export class LicencesComponent implements OnInit, OnDestroy {
           console.log('notification:', notification);
           if (
             notification.userId != this.user.id &&
-            notification.title != 'Queue' &&
+            // notification.title != 'Queue' &&
             notification.title != 'Licence Request Failed'
           ) {
             this.toastr.info(notification.message);
           }
           if (
-            notification.userId == this.user.id &&
+            // notification.userId == this.user.id &&
             notification.title == 'Queue'
           )
             this.toastr.success(notification.message);
@@ -83,7 +83,6 @@ export class LicencesComponent implements OnInit, OnDestroy {
   LoadQueuePosition() {
     this.licenceService.getPosition(this.user).subscribe((position: number) => {
       if (position) {
-        alert(position);
         this.user.queuePosition = position;
       }
     });
