@@ -43,6 +43,11 @@ export const allComments = {
     class: 'unavailable',
     // black
   },
+  first_in_queue:{
+    title: "It's your turn ! ",
+    subtitle: "All you need to do is click on the take licence button before the timer ends ",
+    class: 'available',
+  },
   sessions: {
     title: 'My Sessions',
     subtitle:

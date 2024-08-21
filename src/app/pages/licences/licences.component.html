@@ -13,7 +13,7 @@
     *ngFor="let licence of data"
     [licence]="licence"
     [user]="user"
-    (takeLicenceEvent)="takeLicence($event.id, $event.user)"
+    (takeLicenceEvent)="takeLicence($event.id, $event.user, false)"
     (returnLicenceEvent)="returnLicence($event.id)"
   ></app-licence>
 </mat-card>

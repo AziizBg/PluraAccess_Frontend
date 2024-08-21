@@ -2,37 +2,43 @@
   <mat-card-header>
     <div style="width: 100%">
       <div style="display: flex; gap: 20px">
+        <!-- green available icon -->
         <div
           mat-card-avatar
-          *ngIf="!licence?.currentSession"
+          *ngIf="!licence?.currentSession && !licence?.isBeingRequested"
           ngClass="available-image"
         ></div>
+        <!-- spinner -->
         <mat-spinner
           color="warn"
           style="margin: 10px"
           [diameter]="40"
-          *ngIf="licence?.currentSession"
+          *ngIf="licence?.currentSession || licence?.isBeingRequested"
         ></mat-spinner>
         <div>
           <!-- card title: licence number -->
           <mat-card-title>Licence n°{{ licence?.id }}</mat-card-title>
 
-          <!-- taken by or available -->
+          <!-- taken by or being requested or available -->
+          <!--  -->
           <mat-card-subtitle>
-            @if (licence?.currentSession) {
-            @if(licence?.currentSession?.user?.name){ Taken by
-            {{ licence?.currentSession?.user?.name }}
-            }@else{Being Requested}
-            <br />
-            <!-- timer -->
-            @if(licence?.currentSession?.user?.name){
-            <countdown #cd [config]="countdownConfig"></countdown>} } @else {
-            Available }
+            <!-- being requested -->
+            @if(licence?.isBeingRequested){ Being Requested }
+            
+            <!-- taken by user -->
+            @else if (licence?.currentSession) { 
+              Taken by {{ licence?.currentSession?.user?.name }}
+              <br />
+              <!-- timer -->
+              <countdown #cd [config]="countdownConfig"></countdown>
+            }
+             <!--available  -->
+            @else { Available }
           </mat-card-subtitle>
         </div>
       </div>
 
-      <!-- return licence -->
+      <!-- return licence button -->
       @if(licence?.currentSession?.user?.id == user?.id){
       <mat-card-subtitle>
         <mat-card-actions align="end" style="margin-top: -30px">
@@ -47,13 +53,13 @@
         </mat-card-actions>
       </mat-card-subtitle>
       }
-      <!--take licence  -->
+      <!--take licence  button -->
       @else { @if(licence && user){
       <mat-card-actions align="end" style="margin-top: -50px">
         <button
           mat-flat-button
           [disabled]="
-            user.isStudying || user.isRequesting || licence.currentSession
+            user.isStudying || user.isRequesting || licence.currentSession || licence.isBeingRequested
           "
           (click)="takeLicence(licence.id, user)"
         >

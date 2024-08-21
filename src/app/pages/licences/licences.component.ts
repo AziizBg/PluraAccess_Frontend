@@ -13,7 +13,7 @@ import { Comment } from '../../models/comment';
 import { allComments } from '../../data/all-comments';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Notification } from '../../models/notification';
 import { CookieService } from 'ngx-cookie-service';
@@ -55,6 +55,24 @@ export class LicencesComponent implements OnInit, OnDestroy {
           console.log('notification:', notification);
           this.LoadLicencesData();
           this.LoadQueuePosition();
+          if (
+            notification.title == 'First in queue' &&
+            notification.licenceId
+          ) {
+            this.comment = allComments.first_in_queue;
+            const licenceId: number = notification.licenceId;
+            this.toastr
+              .success(notification.message, '', {
+                timeOut: 15 * 60 * 1000, //15 minutes timeout
+                extendedTimeOut: 2 * 60 * 1000, //2 minutes after the user hovers on the notification
+                progressBar: true,
+              })
+              //on click action: take licence with fromQueue= true
+              .onTap.pipe(take(1))
+              .subscribe(() => {
+                this.takeLicence(licenceId, this.user, true);
+              });
+          }
         }
       );
   }
@@ -68,11 +86,13 @@ export class LicencesComponent implements OnInit, OnDestroy {
     });
   }
   LoadQueuePosition() {
-    this.licenceService.getPosition(this.user).subscribe((position: number) => {
-      if (position) {
-        this.user.queuePosition = position;
-      }
-    });
+    this.licenceService
+      .getPosition(this.user.id)
+      .subscribe((position: number) => {
+        if (position) {
+          this.user.queuePosition = position;
+        }
+      });
   }
 
   LoadUsersData() {
@@ -85,10 +105,10 @@ export class LicencesComponent implements OnInit, OnDestroy {
     });
   }
 
-  takeLicence(id: number, user: User) {
-    // this.comment = allComments.requesting;
+  takeLicence(id: number, user: User, fromQueue: boolean) {
+    this.comment = allComments.requesting;
     this.user.isRequesting = true;
-    this.licenceService.takeLicence(id, user).subscribe(
+    this.licenceService.takeLicence(id, user.id, fromQueue).subscribe(
       (item: ResponseSchema) => {
         this.user.isStudying = true;
         this.user.isRequesting = false;
@@ -116,15 +136,17 @@ export class LicencesComponent implements OnInit, OnDestroy {
   }
   bookLicence() {
     this.comment = allComments.booked;
-    this.licenceService.bookLicence(this.user).subscribe((position: number) => {
-      this.toastr.success('Added to the queue!', '');
-      console.log(position);
-      this.user.queuePosition = position;
-    });
+    this.licenceService
+      .bookLicence(this.user.id)
+      .subscribe((position: number) => {
+        this.toastr.success('Added to the queue!', '');
+        console.log(position);
+        this.user.queuePosition = position;
+      });
   }
   cancelBookLicence() {
     this.licenceService
-      .cancelBookLicence(this.user)
+      .cancelBookLicence(this.user.id)
       .subscribe((response: any) => {
         this.LoadLicencesData();
         this.toastr.info('Booking Canceled');
@@ -142,16 +164,30 @@ export class LicencesComponent implements OnInit, OnDestroy {
     }
 
     // check if user is in queue
-    this.licenceService.getPosition(this.user).subscribe((position: number) => {
-      if (position) {
-        this.user.queuePosition = position;
-        this.comment = allComments.booked;
-      } else {
-        //check if licences are available
-        if (this.data.filter((licence) => !licence.currentSession).length > 0)
-          this.comment = allComments.available;
-        else this.comment = allComments.unavailable;
-      }
-    });
+    this.licenceService
+      .getPosition(this.user.id)
+      .subscribe((position: number) => {
+        //look for available or requested licences
+        const licencesAvialableRequested =
+          this.data.filter((licence) => !licence.currentSession).length > 0;
+        //look for available licences only
+        const licencesAvailable =
+          this.data.filter(
+            (licence) => !licence.currentSession && !licence.isBeingRequested
+          ).length > 0;
+        // if in queue
+        if (position) {
+          this.user.queuePosition = position;
+          // if position = 1 and licence available
+          if (position == 1 && licencesAvialableRequested) {
+            this.comment = allComments.first_in_queue;
+          } else {
+            this.comment = allComments.booked;
+          }
+        } else {
+          if (licencesAvailable) this.comment = allComments.available;
+          else this.comment = allComments.unavailable;
+        }
+      });
   }
 }

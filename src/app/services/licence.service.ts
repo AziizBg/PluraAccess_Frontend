@@ -19,15 +19,16 @@ export class LicenceService {
     return this.http.get<ResponseSchema>('https://localhost:7189/api/Licence');
   }
 
-  takeLicence(id: number, user: User) {
+  takeLicence(id: number, userId:number, fromQueue:Boolean) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
     return this.http.post<ResponseSchema>(
       'https://localhost:7189/api/Licence/' + id + '/take',
       {
-        UserId: user.id,
-        // , NgorkUrl:this.ngrokUrl
+        UserId:userId,
+        // , NgorkUrl:this.ngrokUrl,
+        FromQueue:fromQueue
       },
       { headers }
     );
@@ -39,20 +40,20 @@ export class LicenceService {
       { isBrowserClosed: false }
     );
   }
-  bookLicence(user:User) {
+  bookLicence(userId:number) {
     return this.http.post<number>(
       'https://localhost:7189/api/Queue/',
-      { UserId:user.id }
+      { UserId:userId }
     );
   }
-  cancelBookLicence(user:User){
+  cancelBookLicence(userId:number){
     return this.http.delete(
-      'https://localhost:7189/api/Queue/'+user.id
+      'https://localhost:7189/api/Queue/'+userId
     )
   }
-  getPosition(user:User){
+  getPosition(userId:number){
     return this.http.get<number>(
-      'https://localhost:7189/api/Queue/getPosition/'+user.id,
+      'https://localhost:7189/api/Queue/getPosition/'+userId,
     );
   }
 }
