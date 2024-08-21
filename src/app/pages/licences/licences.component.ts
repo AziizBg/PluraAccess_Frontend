@@ -43,7 +43,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
     private router: Router,
     private notificationService: NotificationService,
     private toastr: ToastrService,
-    private cookieService:CookieService
+    private cookieService: CookieService
   ) {}
 
   ngOnInit(): void {
@@ -53,19 +53,6 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.notificationService.notification$.subscribe(
         (notification: Notification) => {
           console.log('notification:', notification);
-          if (
-            notification.userId != this.user.id &&
-            // notification.title != 'Queue' &&
-            notification.title != 'Licence Request Failed'
-          ) {
-            this.toastr.info(notification.message);
-          }
-          if (
-            // notification.userId == this.user.id &&
-            notification.title == 'Queue'
-          )
-            this.toastr.success(notification.message);
-
           this.LoadLicencesData();
           this.LoadQueuePosition();
         }
@@ -89,7 +76,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
   }
 
   LoadUsersData() {
-    this.user.id=+this.cookieService.get("id");
+    this.user.id = +this.cookieService.get('id');
     this.userService.getUser(this.user.id).subscribe((item: any) => {
       this.user = {
         id: item.id,

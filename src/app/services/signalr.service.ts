@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { NotificationService } from './notification.service';
+import { ToastrService } from 'ngx-toastr';
+import { CookieService } from 'ngx-cookie-service';
+import { Notification } from '../models/notification';
 // import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
@@ -10,8 +13,9 @@ export class SignalrService {
   private hubConnection!: signalR.HubConnection;
 
   constructor(
-    // private toastr: ToastrService,
-    private notificationService: NotificationService
+    private toastrService: ToastrService,
+    private notificationService: NotificationService,
+    private cookieService: CookieService
   )
   {}
 
@@ -29,13 +33,25 @@ export class SignalrService {
       .catch((err) => console.log('Error while starting connection: ' + err));
   };
 
-  public showNotification(notification: any) {
-    console.log('notification:', notification);
-  }
+  public showNotification(notification: Notification) {
+        console.log('notification:', notification);
+        if (
+          notification.userId != +this.cookieService.get("id") &&
+          notification.title != 'Licence Request Failed'
+        ) {
+          this.toastrService.info(notification.message);
+        }
+        if (
+          notification.title == 'Queue'
+        )
+          this.toastrService.success(notification.message);
+      }
+  
+  
 
   public addListener = () => {
-    this.hubConnection.on('SendMessage', (notification: any) => {
-      // this.showNotification(notification);
+    this.hubConnection.on('SendMessage', (notification: Notification) => {
+      this.showNotification(notification);
       // notify other parts of the app about the received message
       this.notificationService.notify(notification); //pass notification to notificationService that uses observables
     });
