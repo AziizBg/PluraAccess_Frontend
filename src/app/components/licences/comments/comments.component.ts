@@ -19,6 +19,7 @@ export class CommentsComponent {
   comment:Comment|undefined;
   @Output() bookLicenceEvent = new EventEmitter();
   @Output() cancelBookLicenceEvent = new EventEmitter();
+  @Output() cancelRequestLicenceEvent = new EventEmitter();
 
 
   allcomments = allComments;
@@ -28,4 +29,8 @@ export class CommentsComponent {
   cancelBookLicence(){
     this.cancelBookLicenceEvent.emit();
   }
+  cancelRequestLicence(){
+    this.cancelRequestLicenceEvent.emit();
+  }
+
 }

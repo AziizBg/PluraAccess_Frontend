@@ -3,6 +3,7 @@
   [user]="user"
   (bookLicenceEvent)="bookLicence()"
   (cancelBookLicenceEvent)="cancelBookLicence()"
+  (cancelRequestLicenceEvent)="cancelRequestLicence()"
 ></app-comments>
 
 <mat-card>
@@ -13,7 +14,7 @@
     *ngFor="let licence of data"
     [licence]="licence"
     [user]="user"
-    (takeLicenceEvent)="takeLicence($event.id, $event.user, false)"
+    (takeLicenceEvent)="takeLicence($event.id, $event.user, $event.fromQueue)"
     (returnLicenceEvent)="returnLicence($event.id)"
   ></app-licence>
 </mat-card>

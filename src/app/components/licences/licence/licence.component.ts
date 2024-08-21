@@ -20,7 +20,7 @@ import { LicenceService } from '../../../services/licence.service';
 export class LicenceComponent implements OnInit, OnChanges {
   @Input() licence: Licence|undefined;
   @Input() user: User|undefined;
-  @Output() takeLicenceEvent = new EventEmitter<{id:number, user:User}>();
+  @Output() takeLicenceEvent = new EventEmitter<{id:number, user:User, fromQueue:boolean}>();
   @Output() returnLicenceEvent = new EventEmitter<{id:number}>();
   countdownConfig: any;
 
@@ -43,8 +43,8 @@ export class LicenceComponent implements OnInit, OnChanges {
     }
   }
 
-  takeLicence(id:number, user:User){
-    this.takeLicenceEvent.emit({id, user});
+  takeLicence(id:number, user:User, fromQueue:boolean){
+    this.takeLicenceEvent.emit({id, user, fromQueue});
   }
 
   returnLicence(id:number){

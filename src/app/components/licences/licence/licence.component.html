@@ -5,7 +5,7 @@
         <!-- green available icon -->
         <div
           mat-card-avatar
-          *ngIf="!licence?.currentSession && !licence?.isBeingRequested"
+          *ngIf="!licence?.currentSession && !licence?.bookedByUserId || licence?.bookedByUserId==user?.id"
           ngClass="available-image"
         ></div>
         <!-- spinner -->
@@ -13,7 +13,7 @@
           color="warn"
           style="margin: 10px"
           [diameter]="40"
-          *ngIf="licence?.currentSession || licence?.isBeingRequested"
+          *ngIf="licence?.currentSession || licence?.bookedByUserId && licence?.bookedByUserId!=user?.id"
         ></mat-spinner>
         <div>
           <!-- card title: licence number -->
@@ -23,7 +23,10 @@
           <!--  -->
           <mat-card-subtitle>
             <!-- being requested -->
-            @if(licence?.isBeingRequested){ Being Requested }
+            @if(licence?.bookedByUserId){
+              @if(licence?.bookedByUserId==user?.id) {Available for you only now }
+              @else {Being Requested }
+            }
             
             <!-- taken by user -->
             @else if (licence?.currentSession) { 
@@ -59,9 +62,9 @@
         <button
           mat-flat-button
           [disabled]="
-            user.isStudying || user.isRequesting || licence.currentSession || licence.isBeingRequested
+            user.isStudying || user.isRequesting || licence.currentSession || licence.bookedByUserId && licence.bookedByUserId != user.id
           "
-          (click)="takeLicence(licence.id, user)"
+          (click)="takeLicence(licence.id, user,  licence.bookedByUserId==user.id)"
         >
           Take Licence
         </button>

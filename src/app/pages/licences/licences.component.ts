@@ -62,16 +62,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
             this.comment = allComments.first_in_queue;
             const licenceId: number = notification.licenceId;
             this.toastr
-              .success(notification.message, '', {
-                timeOut: 15 * 60 * 1000, //15 minutes timeout
-                extendedTimeOut: 2 * 60 * 1000, //2 minutes after the user hovers on the notification
-                progressBar: true,
-              })
-              //on click action: take licence with fromQueue= true
-              .onTap.pipe(take(1))
-              .subscribe(() => {
-                this.takeLicence(licenceId, this.user, true);
-              });
+              .success(notification.message);
           }
         }
       );
@@ -144,6 +135,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
         this.user.queuePosition = position;
       });
   }
+  //exit the waiting queue while waiting
   cancelBookLicence() {
     this.licenceService
       .cancelBookLicence(this.user.id)
@@ -152,6 +144,25 @@ export class LicencesComponent implements OnInit, OnDestroy {
         this.toastr.info('Booking Canceled');
       });
   }
+
+  //exit the waiting queue when client is first in the queue and gets a notification to take a licence
+  //could be because he chose to or if notification timer ended
+  cancelRequestLicence() {
+    const id = this.getBookedLicence().id;
+    this.licenceService
+      .cancelRequestLicence(id)
+      .subscribe((response: any) => {
+        this.LoadLicencesData();
+        this.toastr.info('Booking Canceled');
+      });
+  }
+
+  getBookedLicence(){
+    return this.data.filter(
+      (licence)=>licence.bookedByUserId==this.user.id
+    )[0];
+  }
+
   checkUserState() {
     //check if user is learning
     const userSessions = this.data
@@ -173,7 +184,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
         //look for available licences only
         const licencesAvailable =
           this.data.filter(
-            (licence) => !licence.currentSession && !licence.isBeingRequested
+            (licence) => !licence.currentSession && !licence.bookedByUserId
           ).length > 0;
         // if in queue
         if (position) {

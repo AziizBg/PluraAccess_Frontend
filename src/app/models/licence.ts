@@ -4,5 +4,5 @@ export interface Licence{
     id:number,
     email?:string,
     currentSession?:Session,
-    isBeingRequested?:boolean
+    bookedByUserId?:number
 }
