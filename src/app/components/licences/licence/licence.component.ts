@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitte
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CountdownModule } from 'ngx-countdown';
+import { CountdownEvent, CountdownModule } from 'ngx-countdown';
 import { Licence } from '../../../models/licence';
 import { CommonModule } from '@angular/common';
 import { ResponseSchema } from '../../../models/response.schema';
@@ -22,6 +22,7 @@ export class LicenceComponent implements OnInit, OnChanges {
   @Input() user: User|undefined;
   @Output() takeLicenceEvent = new EventEmitter<{id:number, user:User, fromQueue:boolean}>();
   @Output() returnLicenceEvent = new EventEmitter<{id:number}>();
+  @Output() timerEndedEvent = new EventEmitter();
   countdownConfig: any;
 
   constructor(private service:LicenceService){}
@@ -37,9 +38,15 @@ export class LicenceComponent implements OnInit, OnChanges {
   }
 
   updateCountdownConfig(): void {
+    //session time left
     if (this.licence && this.licence.currentSession) {
       const endTime: number = new Date(this.licence.currentSession.endTime).getTime();
       this.countdownConfig = { leftTime: (endTime - Date.now()) / 1000 }; // Convert milliseconds to seconds
+    }
+    //Booking time left (first in queue)
+    if(this.licence && this.licence.bookedUntil){
+      const bookedUntil:number = new Date(this.licence.bookedUntil).getTime();
+      this.countdownConfig= {leftTime : (bookedUntil - Date.now())/1000};
     }
   }
 
@@ -49,6 +56,11 @@ export class LicenceComponent implements OnInit, OnChanges {
 
   returnLicence(id:number){
     this.returnLicenceEvent.emit({id});
+  }
+
+  handleCountDown(event: CountdownEvent){
+    if(event.action =="done")
+      this.timerEndedEvent.emit();
   }
 
   

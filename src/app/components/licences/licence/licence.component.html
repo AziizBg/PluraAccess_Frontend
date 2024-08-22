@@ -24,7 +24,12 @@
           <mat-card-subtitle>
             <!-- being requested -->
             @if(licence?.bookedByUserId){
-              @if(licence?.bookedByUserId==user?.id) {Available for you only now }
+              @if(licence?.bookedByUserId==user?.id) {
+                Available for you only now 
+                <br />
+                <!-- licence booking time left timer -->
+                <countdown #cd [config]="countdownConfig" (event)="handleCountDown($event)"></countdown>
+              }
               @else {Being Requested }
             }
             
@@ -32,7 +37,7 @@
             @else if (licence?.currentSession) { 
               Taken by {{ licence?.currentSession?.user?.name }}
               <br />
-              <!-- timer -->
+              <!-- session time left timer -->
               <countdown #cd [config]="countdownConfig"></countdown>
             }
              <!--available  -->

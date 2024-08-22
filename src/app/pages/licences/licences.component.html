@@ -16,5 +16,6 @@
     [user]="user"
     (takeLicenceEvent)="takeLicence($event.id, $event.user, $event.fromQueue)"
     (returnLicenceEvent)="returnLicence($event.id)"
+    (timerEndedEvent)="cancelRequestLicence()"
   ></app-licence>
 </mat-card>

@@ -53,7 +53,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.notificationService.notification$.subscribe(
         (notification: Notification) => {
           console.log('notification:', notification);
-          this.LoadLicencesData();
+          this.LoadLicencesData();          
           this.LoadQueuePosition();
           if (
             notification.title == 'First in queue' &&
@@ -98,13 +98,14 @@ export class LicencesComponent implements OnInit, OnDestroy {
 
   takeLicence(id: number, user: User, fromQueue: boolean) {
     this.comment = allComments.requesting;
+    this.toastr.info('Requesting Licence ...');
     this.user.isRequesting = true;
     this.licenceService.takeLicence(id, user.id, fromQueue).subscribe(
       (item: ResponseSchema) => {
         this.user.isStudying = true;
         this.user.isRequesting = false;
         this.comment = allComments.learning;
-        this.LoadLicencesData();
+        // this.LoadLicencesData();
         this.toastr.success('Licence Taken. Learn well !', '');
       },
       (error) => {
@@ -115,6 +116,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
     );
   }
   returnLicence(id: number) {
+    this.toastr.info("Returning licence")
     this.comment = allComments.returning;
     this.licenceService.returnLicence(id).subscribe((item: ResponseSchema) => {
       this.user.isStudying = false;

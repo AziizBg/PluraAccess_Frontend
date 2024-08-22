@@ -5,4 +5,5 @@ export interface Licence{
     email?:string,
     currentSession?:Session,
     bookedByUserId?:number
+    bookedUntil?:Date
 }
