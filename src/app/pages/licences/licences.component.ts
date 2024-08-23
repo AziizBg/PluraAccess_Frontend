@@ -53,16 +53,15 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.notificationService.notification$.subscribe(
         (notification: Notification) => {
           console.log('notification:', notification);
-          this.LoadLicencesData();          
+          this.LoadLicencesData();
           this.LoadQueuePosition();
           if (
             notification.title == 'First in queue' &&
             notification.licenceId
           ) {
-            this.comment = allComments.first_in_queue;
-            const licenceId: number = notification.licenceId;
-            this.toastr
-              .success(notification.message);
+            this.LoadUsersData();
+            // this.comment = allComments.first_in_queue;
+            this.toastr.success(notification.message);
           }
         }
       );
@@ -92,6 +91,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
       this.user = {
         id: item.id,
         name: item.name,
+        bookedLicenceId: item.bookedLicenceId,
       };
     });
   }
@@ -116,7 +116,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
     );
   }
   returnLicence(id: number) {
-    this.toastr.info("Returning licence")
+    this.toastr.info('Returning licence');
     this.comment = allComments.returning;
     this.licenceService.returnLicence(id).subscribe((item: ResponseSchema) => {
       this.user.isStudying = false;
@@ -151,17 +151,15 @@ export class LicencesComponent implements OnInit, OnDestroy {
   //could be because he chose to or if notification timer ended
   cancelRequestLicence() {
     const id = this.getBookedLicence().id;
-    this.licenceService
-      .cancelRequestLicence(id)
-      .subscribe((response: any) => {
-        this.LoadLicencesData();
-        this.toastr.info('Booking Canceled');
-      });
+    this.licenceService.cancelRequestLicence(id).subscribe((response: any) => {
+      this.LoadLicencesData();
+      this.toastr.info('Booking Canceled');
+    });
   }
 
-  getBookedLicence(){
+  getBookedLicence() {
     return this.data.filter(
-      (licence)=>licence.bookedByUserId==this.user.id
+      (licence) => licence.bookedByUserId == this.user.id
     )[0];
   }
 
@@ -176,30 +174,43 @@ export class LicencesComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // check if licences are available and unbooked
+    //look for available or requested licences
+    const licencesAvialableRequested =
+      this.data.filter((licence) => !licence.currentSession).length > 0;
+    //look for available licences only
+    const licencesAvailable =
+      this.data.filter(
+        (licence) => !licence.currentSession && !licence.bookedByUserId
+      ).length > 0;
+    if (licencesAvailable) {
+      this.comment = allComments.available;
+      return;
+    }
+
     // check if user is in queue
     this.licenceService
       .getPosition(this.user.id)
       .subscribe((position: number) => {
-        //look for available or requested licences
-        const licencesAvialableRequested =
-          this.data.filter((licence) => !licence.currentSession).length > 0;
-        //look for available licences only
-        const licencesAvailable =
-          this.data.filter(
-            (licence) => !licence.currentSession && !licence.bookedByUserId
-          ).length > 0;
         // if in queue
+        console.log("position:", position);
+        console.log("user:", this.user);
+        
+        
         if (position) {
           this.user.queuePosition = position;
-          // if position = 1 and licence available
-          if (position == 1 && licencesAvialableRequested) {
+          const bookedLicences = this.data.filter(
+            (licence) => !licence.currentSession && licence.bookedByUserId
+          );
+
+          // if position = 1 and licence available or licence requested by user
+          if (this.user.bookedLicenceId) {
             this.comment = allComments.first_in_queue;
           } else {
             this.comment = allComments.booked;
           }
         } else {
-          if (licencesAvailable) this.comment = allComments.available;
-          else this.comment = allComments.unavailable;
+          if (!licencesAvailable) this.comment = allComments.unavailable;
         }
       });
   }

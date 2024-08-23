@@ -7,4 +7,5 @@ export interface User{
     isStudying?:boolean,
     isRequesting?:boolean,
     queuePosition?:number,
+    bookedLicenceId?:number
 }
