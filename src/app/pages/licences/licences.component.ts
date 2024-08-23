@@ -96,6 +96,12 @@ export class LicencesComponent implements OnInit, OnDestroy {
     });
   }
 
+  extendLicence(id: number) {
+    this.licenceService.extendLicence(id).subscribe((item: any) => {
+      this.toastr.success('Licence Extended');
+    });
+  }
+
   takeLicence(id: number, user: User, fromQueue: boolean) {
     this.comment = allComments.requesting;
     this.toastr.info('Requesting Licence ...');
@@ -163,54 +169,49 @@ export class LicencesComponent implements OnInit, OnDestroy {
     )[0];
   }
 
-  checkUserState() {
-    //check if user is learning
+  isUserStudying() {
     const userSessions = this.data
       .filter((licence) => licence.currentSession)
       .filter((licence) => licence.currentSession?.user?.id == this.user.id);
-    if (userSessions.length > 0) {
+    return userSessions.length > 0;
+  }
+
+  areLicencesAvailable() {
+    return (
+      this.data.filter(
+        (licence) => !licence.currentSession && !licence.bookedByUserId
+      ).length > 0
+    );
+  }
+
+  checkUserState() {
+    //check if user is learning
+    if (this.isUserStudying()) {
       this.user.isStudying = true;
       this.comment = allComments.learning;
       return;
     }
-
-    // check if licences are available and unbooked
-    //look for available or requested licences
-    const licencesAvialableRequested =
-      this.data.filter((licence) => !licence.currentSession).length > 0;
     //look for available licences only
-    const licencesAvailable =
-      this.data.filter(
-        (licence) => !licence.currentSession && !licence.bookedByUserId
-      ).length > 0;
-    if (licencesAvailable) {
+    if (this.areLicencesAvailable()) {
       this.comment = allComments.available;
       return;
     }
-
     // check if user is in queue
     this.licenceService
       .getPosition(this.user.id)
       .subscribe((position: number) => {
         // if in queue
-        console.log("position:", position);
-        console.log("user:", this.user);
-        
-        
         if (position) {
           this.user.queuePosition = position;
-          const bookedLicences = this.data.filter(
-            (licence) => !licence.currentSession && licence.bookedByUserId
-          );
-
-          // if position = 1 and licence available or licence requested by user
+          // if user has a booked licence (first in queue)
           if (this.user.bookedLicenceId) {
             this.comment = allComments.first_in_queue;
           } else {
             this.comment = allComments.booked;
           }
         } else {
-          if (!licencesAvailable) this.comment = allComments.unavailable;
+          if (!this.areLicencesAvailable())
+            this.comment = allComments.unavailable;
         }
       });
   }

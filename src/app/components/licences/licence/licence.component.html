@@ -5,7 +5,10 @@
         <!-- green available icon -->
         <div
           mat-card-avatar
-          *ngIf="!licence?.currentSession && !licence?.bookedByUserId || licence?.bookedByUserId==user?.id"
+          *ngIf="
+            (!licence?.currentSession && !licence?.bookedByUserId) ||
+            licence?.bookedByUserId == user?.id
+          "
           ngClass="available-image"
         ></div>
         <!-- spinner -->
@@ -13,7 +16,10 @@
           color="warn"
           style="margin: 10px"
           [diameter]="40"
-          *ngIf="licence?.currentSession || licence?.bookedByUserId && licence?.bookedByUserId!=user?.id"
+          *ngIf="
+            licence?.currentSession ||
+            (licence?.bookedByUserId && licence?.bookedByUserId != user?.id)
+          "
         ></mat-spinner>
         <div>
           <!-- card title: licence number -->
@@ -23,33 +29,48 @@
           <!--  -->
           <mat-card-subtitle>
             <!-- being requested -->
-            @if(licence?.bookedByUserId){
-              @if(licence?.bookedByUserId==user?.id) {
-                Available for you only now 
-                <br />
-                <!-- licence booking time left timer -->
-                <countdown #cd [config]="countdownConfig" (event)="handleCountDown($event)"></countdown>
-              }
-              @else {Being Requested }
-            }
-            
+            @if(licence?.bookedByUserId){ @if(licence?.bookedByUserId==user?.id)
+            { Available for you only now
+            <br />
+            <!-- licence booking time left timer -->
+            <countdown
+              [config]="bookCountdownConfig"
+              (event)="handleBookCountDown($event)"
+            ></countdown>
+            } @else {Being Requested } }
+
             <!-- taken by user -->
-            @else if (licence?.currentSession) { 
-              Taken by {{ licence?.currentSession?.user?.name }}
-              <br />
-              <!-- session time left timer -->
-              <countdown #cd [config]="countdownConfig"></countdown>
+            @else if (licence?.currentSession) { Taken by
+            {{ licence?.currentSession?.user?.name }}
+            <br />
+
+            <!-- session time left timer -->
+            <countdown
+              [config]="sessionCountdownConfig"
+              (event)="handleSessionCountDown($event)"
+            ></countdown>
+
             }
-             <!--available  -->
+            <!--available  -->
             @else { Available }
           </mat-card-subtitle>
         </div>
       </div>
 
-      <!-- return licence button -->
+      <!-- return and extend licence button -->
       @if(licence?.currentSession?.user?.id == user?.id){
       <mat-card-subtitle>
         <mat-card-actions align="end" style="margin-top: -30px">
+          @if (licencesAvailable && isExtendable ) {
+          <button
+            *ngIf="licence"
+            mat-flat-button
+            style="background-color: #3c715d; margin-right: 10px"
+            (click)="extendLicence(licence.id)"
+          >
+            Extend Licence
+          </button>
+          }
           <button
             color="warn"
             *ngIf="licence"
@@ -67,9 +88,14 @@
         <button
           mat-flat-button
           [disabled]="
-            user.isStudying || user.isRequesting || licence.currentSession || licence.bookedByUserId && licence.bookedByUserId != user.id
+            isUserStudying ||
+            user.isRequesting ||
+            licence.currentSession ||
+            (licence.bookedByUserId && licence.bookedByUserId != user.id)
           "
-          (click)="takeLicence(licence.id, user,  licence.bookedByUserId==user.id)"
+          (click)="
+            takeLicence(licence.id, user, licence.bookedByUserId == user.id)
+          "
         >
           Take Licence
         </button>

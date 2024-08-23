@@ -14,8 +14,11 @@
     *ngFor="let licence of data"
     [licence]="licence"
     [user]="user"
+    [licencesAvailable]="areLicencesAvailable()"
+    [isUserStudying]="isUserStudying()"
     (takeLicenceEvent)="takeLicence($event.id, $event.user, $event.fromQueue)"
     (returnLicenceEvent)="returnLicence($event.id)"
+    (extendLicenceEvent)="extendLicence($event.id)"
     (timerEndedEvent)="cancelRequestLicence()"
   ></app-licence>
 </mat-card>

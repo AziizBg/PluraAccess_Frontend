@@ -1,31 +1,59 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CountdownEvent, CountdownModule } from 'ngx-countdown';
+import {
+  CountdownConfig,
+  CountdownEvent,
+  CountdownModule,
+} from 'ngx-countdown';
 import { Licence } from '../../../models/licence';
 import { CommonModule } from '@angular/common';
 import { ResponseSchema } from '../../../models/response.schema';
 import { User } from '../../../models/user';
 import { LicenceService } from '../../../services/licence.service';
 
-
 @Component({
   selector: 'app-licence',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, CountdownModule, CommonModule, MatProgressSpinnerModule],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    CountdownModule,
+    CommonModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './licence.component.html',
-  styleUrl: './licence.component.css'
+  styleUrl: './licence.component.css',
 })
 export class LicenceComponent implements OnInit, OnChanges {
-  @Input() licence: Licence|undefined;
-  @Input() user: User|undefined;
-  @Output() takeLicenceEvent = new EventEmitter<{id:number, user:User, fromQueue:boolean}>();
-  @Output() returnLicenceEvent = new EventEmitter<{id:number}>();
+  @Input() licence: Licence | undefined;
+  @Input() user: User | undefined;
+  @Input() licencesAvailable: boolean | undefined;
+  @Input() isUserStudying: boolean | undefined;
+  @Output() takeLicenceEvent = new EventEmitter<{
+    id: number;
+    user: User;
+    fromQueue: boolean;
+  }>();
+  @Output() returnLicenceEvent = new EventEmitter<{ id: number }>();
   @Output() timerEndedEvent = new EventEmitter();
-  countdownConfig: any;
+  @Output() extendLicenceEvent = new EventEmitter<{ id: number }>();
+  sessionCountdownConfig: any;
+  bookCountdownConfig:any;
+  isExtendable: boolean = false;
+  SESSION_DURATION = 120 * 60 ; //2 hours
+  EXTEND_TIME = 10 ; //10 seconds
 
-  constructor(private service:LicenceService){}
+  constructor(private service: LicenceService) {}
 
   ngOnInit(): void {
     this.updateCountdownConfig();
@@ -40,28 +68,42 @@ export class LicenceComponent implements OnInit, OnChanges {
   updateCountdownConfig(): void {
     //session time left
     if (this.licence && this.licence.currentSession) {
-      const endTime: number = new Date(this.licence.currentSession.endTime).getTime();
-      this.countdownConfig = { leftTime: (endTime - Date.now()) / 1000 }; // Convert milliseconds to seconds
+      const endTime: number = new Date(
+        this.licence.currentSession.endTime
+      ).getTime();
+      const leftTime = (endTime - Date.now()) / 1000;
+      this.sessionCountdownConfig = {
+        leftTime: leftTime,
+        notify: this.SESSION_DURATION- this.EXTEND_TIME,
+      };
+      if (leftTime<this.SESSION_DURATION- this.EXTEND_TIME) this.isExtendable = true;
     }
     //Booking time left (first in queue)
-    if(this.licence && this.licence.bookedUntil){
-      const bookedUntil:number = new Date(this.licence.bookedUntil).getTime();
-      this.countdownConfig= {leftTime : (bookedUntil - Date.now())/1000};
+    if (this.licence && this.licence.bookedUntil) {
+      const bookedUntil: number = new Date(this.licence.bookedUntil).getTime();
+      this.bookCountdownConfig = { leftTime: (bookedUntil - Date.now()) / 1000 };
     }
   }
 
-  takeLicence(id:number, user:User, fromQueue:boolean){
-    this.takeLicenceEvent.emit({id, user, fromQueue});
+  takeLicence(id: number, user: User, fromQueue: boolean) {
+    this.takeLicenceEvent.emit({ id, user, fromQueue });
   }
 
-  returnLicence(id:number){
-    this.returnLicenceEvent.emit({id});
+  returnLicence(id: number) {
+    this.returnLicenceEvent.emit({ id });
   }
 
-  handleCountDown(event: CountdownEvent){
-    if(event.action =="done")
-      this.timerEndedEvent.emit();
+  extendLicence(id: number) {
+    this.extendLicenceEvent.emit({ id });
   }
 
-  
+  handleBookCountDown(event: CountdownEvent) {
+    if (event.action == 'done') this.timerEndedEvent.emit();
+  }
+
+  handleSessionCountDown(event: CountdownEvent) {
+    if (event.action == 'notify') {
+      this.isExtendable = true;
+    }
+  }
 }

@@ -24,7 +24,7 @@ export class LicenceService {
       'Content-Type': 'application/json',
     });
     return this.http.post<ResponseSchema>(
-      'https://localhost:7189/api/Licence/' + id + '/take',
+      'https://localhost:7189/api/Licence/take/' + id ,
       {
         UserId:userId,
         // , NgorkUrl:this.ngrokUrl,
@@ -36,10 +36,19 @@ export class LicenceService {
   //finish session, close browser, return licence
   returnLicence(id: number) {
     return this.http.post<ResponseSchema>(
-      'https://localhost:7189/api/Licence/' + id + '/return',
+      'https://localhost:7189/api/Licence/return/' + id,
       { isBrowserClosed: false }
     );
   }
+
+  // extend licence
+  extendLicence(id: number){
+    return this.http.get(
+      'https://localhost:7189/api/Licence/extend/' + id
+    )
+  }
+
+
   //Be added to the waiting queue for future available licences
   bookLicence(userId:number) {
     return this.http.post<number>(
@@ -57,7 +66,7 @@ export class LicenceService {
   //could be because he chose to or if notification timer ended
   cancelRequestLicence(id: number){
     return this.http.get(
-      'https://localhost:7189/api/Licence/'+id+'/cancelBookLicence'
+      'https://localhost:7189/api/Licence/cancelBookLicence/'+id
     )
   } 
 
