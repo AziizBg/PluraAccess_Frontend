@@ -1,7 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { MaterialModule } from '../../../module/Material.Module';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+  FormGroup,
+} from '@angular/forms';
 import { merge } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -14,57 +19,52 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
-  // Username
-  readonly username = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-  ]);
+  registerForm = new FormGroup({
+    username: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
+    confirmPassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
+  });
+
   usernameErrorMessage = signal('');
-
-  // Email
-  readonly email = new FormControl('', [Validators.required, Validators.email]);
   emailErrorMessage = signal('');
-
-  // Password
-  readonly password = new FormControl('', [
-    Validators.required,
-    Validators.minLength(8),
-  ]);
   passwordErrorMessage = signal('');
-
-  // Confirm Password
-  readonly confirmPassword = new FormControl('', [
-    Validators.required,
-    Validators.minLength(8),
-  ]);
   confirmPasswordErrorMessage = signal('');
 
-  // Control password visibility
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
 
   constructor() {
-    merge(this.username.statusChanges, this.username.valueChanges)
+    merge(this.registerForm.get('username')?.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateUsernameErrorMessage());
 
-    merge(this.email.statusChanges, this.email.valueChanges)
+    merge(this.registerForm.get('email')?.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateEmailErrorMessage());
 
-    merge(this.password.statusChanges, this.password.valueChanges)
+    merge(this.registerForm.get('password')?.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updatePasswordErrorMessage());
 
-    merge(this.confirmPassword.statusChanges, this.confirmPassword.valueChanges)
+    merge(this.registerForm.get('confirmPassword')?.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateConfirmPasswordErrorMessage());
   }
 
   updateUsernameErrorMessage() {
-    if (this.username.hasError('required')) {
+    if (this.registerForm.get('username')?.hasError('required')) {
       this.usernameErrorMessage.set('You must enter a username');
-    } else if (this.username.hasError('minlength')) {
+    } else if (this.registerForm.get('username')?.hasError('minlength')) {
       this.usernameErrorMessage.set('Username is too short');
     } else {
       this.usernameErrorMessage.set('');
@@ -72,9 +72,9 @@ export class RegisterComponent {
   }
 
   updateEmailErrorMessage() {
-    if (this.email.hasError('required')) {
+    if (this.registerForm.get('email')?.hasError('required')) {
       this.emailErrorMessage.set('You must enter an email');
-    } else if (this.email.hasError('email')) {
+    } else if (this.registerForm.get('email')?.hasError('email')) {
       this.emailErrorMessage.set('Not a valid email');
     } else {
       this.emailErrorMessage.set('');
@@ -82,24 +82,38 @@ export class RegisterComponent {
   }
 
   updatePasswordErrorMessage() {
-    if (this.password.hasError('required')) {
+    this.passwordErrorMessage.set('');
+
+    if (this.registerForm.get('password')?.hasError('required')) {
       this.passwordErrorMessage.set('You must enter a password');
-    } else if (this.password.hasError('minlength')) {
+    }
+    if (this.registerForm.get('password')?.hasError('minlength')) {
       this.passwordErrorMessage.set('Password is too short');
-    } else {
-      this.passwordErrorMessage.set('');
+    } else if (
+      this.registerForm.get('confirmPassword')?.value &&
+      this.registerForm.get('confirmPassword')?.value !=
+        this.registerForm.get('password')?.value
+    ) {
+      this.passwordErrorMessage.set("Passwords don't match");
     }
   }
 
   updateConfirmPasswordErrorMessage() {
-    if (this.confirmPassword.hasError('required')) {
+    this.updatePasswordErrorMessage();
+    if (this.registerForm.get('confirmPassword')?.hasError('required')) {
       this.confirmPasswordErrorMessage.set('You must confirm your password');
-    } else if (this.confirmPassword.value !== this.password.value) {
-      console.log('false');
+    } else if (
+      this.registerForm.get('confirmPassword')?.value !=
+      this.registerForm.get('password')?.value
+    ) {
+      this.registerForm.get('confirmPassword')?.setErrors({
+        passwordMismatch: true,
+      });
       this.confirmPasswordErrorMessage.set('Passwords do not match');
     } else {
       this.confirmPasswordErrorMessage.set('');
     }
+    console.log(this.confirmPasswordErrorMessage());
   }
 
   togglePasswordVisibility(event: MouseEvent) {
@@ -110,5 +124,21 @@ export class RegisterComponent {
   toggleConfirmPasswordVisibility(event: MouseEvent) {
     this.hideConfirmPassword.set(!this.hideConfirmPassword());
     event.stopPropagation();
+  }
+  onSubmit() {
+    this.updateUsernameErrorMessage();
+    this.updateEmailErrorMessage();
+    this.updateConfirmPasswordErrorMessage();
+
+    if (this.registerForm.valid) {
+      const formData = this.registerForm.value;
+      console.log('formdata:', formData);
+    } else {
+      console.log(this.registerForm.errors);
+      console.log(this.registerForm.get('username')?.errors);
+      console.log(this.registerForm.get('email')?.errors);
+      console.log(this.registerForm.get('password')?.errors);
+      console.log(this.registerForm.get('confirmPassword')?.errors);
+    }
   }
 }
