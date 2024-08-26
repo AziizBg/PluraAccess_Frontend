@@ -4,11 +4,12 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormControl, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {merge} from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule],
+  imports: [MaterialModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })

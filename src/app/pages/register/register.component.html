@@ -1,0 +1,116 @@
+<mat-card
+  style="
+    margin-top: 10%;
+    padding: 20px 0px;
+    display: flex;
+    align-self: center;
+    align-items: center;
+  "
+>
+  <mat-card-title
+    style="display: flex; align-self: center; margin-bottom: 20px"
+  >
+    <h2>Register</h2>
+  </mat-card-title>
+
+  <mat-card-subtitle>
+    Create a new account to use this application
+    <br />
+  </mat-card-subtitle>
+
+  <mat-card-content style="width: 90%">
+    <mat-form-field style="width: 100%">
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        placeholder="Enter your username"
+        [formControl]="username"
+        (blur)="updateUsernameErrorMessage()"
+        required
+      />
+      <mat-error *ngIf="username.invalid">{{
+        usernameErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <br />
+
+    <mat-form-field style="width: 100%">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        placeholder="pat@example.com"
+        [formControl]="email"
+        (blur)="updateEmailErrorMessage()"
+        required
+      />
+      <mat-error *ngIf="email.invalid">{{ emailErrorMessage() }}</mat-error>
+    </mat-form-field>
+
+    <br />
+
+    <mat-form-field style="width: 100%">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [type]="hidePassword() ? 'password' : 'text'"
+        required
+        [formControl]="password"
+        (blur)="updatePasswordErrorMessage()"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="togglePasswordVisibility($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hidePassword()"
+      >
+        <mat-icon>{{
+          hidePassword() ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+
+      <mat-error *ngIf="password.invalid">{{
+        passwordErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <br />
+
+    <mat-form-field style="width: 100%">
+      <mat-label>Confirm Password</mat-label>
+      <input
+        matInput
+        [type]="hideConfirmPassword() ? 'password' : 'text'"
+        required
+        [formControl]="confirmPassword"
+        (blur)="updateConfirmPasswordErrorMessage()"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="toggleConfirmPasswordVisibility($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hideConfirmPassword()"
+      >
+        <mat-icon>{{
+          hideConfirmPassword() ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+      <mat-error *ngIf="confirmPassword.invalid">{{
+        confirmPasswordErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button style="width: 100%; margin-top: 30px; background-color: #3c715d; ">
+        Register
+      </button>
+      <button
+        mat-raised-button
+        style="width: 100%; margin-top: 10px; color: #3c715dc4; "
+        routerLink="/"
+      >
+        Already have an account? Login
+      </button>
+  </mat-card-content>
+</mat-card>

@@ -17,7 +17,7 @@
     <br />
   </mat-card-subtitle>
 
-  <mat-card-content style="width: 70%">
+  <mat-card-content style="width: 90%">
     <mat-form-field style="width: 100%">
       <mat-label>Enter your email</mat-label>
       <input
@@ -53,14 +53,18 @@
         <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
       </button>
       @if (password.invalid) {
-        <mat-error>{{ passwordErrorMessage() }}</mat-error>
-        }
+      <mat-error>{{ passwordErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
+    <button mat-flat-button style="width: 100%; margin-top: 30px; background-color: #3c715d; ">
+      Log in
+    </button>
     <button
       mat-raised-button
-      style="width: 100%; display: flex; align-self: center; margin-top: 30px"
+      style="width: 100%; margin-top: 10px; color: #3c715dc4; "
+      routerLink="/register"
     >
-      log in
+      Don't have an account? Sign Up
     </button>
   </mat-card-content>
 </mat-card>

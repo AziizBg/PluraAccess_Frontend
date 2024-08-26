@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   }
   checkRoute() {
     const currentRoute = this.router.url;
-    this.showHeader = currentRoute != '/';
+    this.showHeader = (currentRoute != '/' && currentRoute!="/register");
   }
 
   ngOnInit(): void {
