@@ -1,8 +1,12 @@
 <div class="container">
-  @if (showHeader) {
+  @if (!showHeader) {
+  <mat-card style="padding: 3% 30%">
+    <router-outlet></router-outlet>
+  </mat-card>
+  }@else {
   <app-menuheader></app-menuheader>
-  }
   <mat-card>
     <router-outlet></router-outlet>
   </mat-card>
+  }
 </div>

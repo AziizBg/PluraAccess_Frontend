@@ -52,7 +52,7 @@ export class LicenceComponent implements OnInit, OnChanges {
   bookCountdownConfig:any;
   isExtendable: boolean = false;
   SESSION_DURATION = 120 * 60 ; //2 hours
-  EXTEND_TIME = 10 ; //10 seconds
+  EXTEND_TIME = 60 ; //60 seconds
 
   constructor(private service: LicenceService, private toastr: ToastrService) {}
 

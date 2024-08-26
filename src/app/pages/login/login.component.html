@@ -1,11 +1,66 @@
-<mat-card style="margin-top: 10%; padding: 20px 50px; display: flex; align-self: center; align-items: center;">
-    <mat-card-title style="display:flex;align-self:center; ">
-        <h2 >SSO Log in</h2>
-    </mat-card-title>
-    <mat-card-subtitle>
-        You need to be signed in with your oddo-bhf email to use this application 
-    </mat-card-subtitle>
-    <button mat-raised-button style="width: 55%; display: flex; align-self: center; margin-top:30px;">
-        log in
+<mat-card
+  style="
+    margin-top: 10%;
+    padding: 20px 0px;
+    display: flex;
+    align-self: center;
+    align-items: center;
+  "
+>
+  <mat-card-title
+    style="display: flex; align-self: center; margin-bottom: 20px"
+  >
+    <h2>Log in</h2>
+  </mat-card-title>
+  <mat-card-subtitle>
+    You need to be signed in to use this application
+    <br />
+  </mat-card-subtitle>
+
+  <mat-card-content style="width: 70%">
+    <mat-form-field style="width: 100%">
+      <mat-label>Enter your email</mat-label>
+      <input
+        matInput
+        placeholder="pat@example.com"
+        [formControl]="email"
+        (blur)="updateEmailErrorMessage()"
+        required
+      />
+      @if (email.invalid) {
+      <mat-error>{{ emailErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+
+    <br />
+
+    <mat-form-field style="width: 100%">
+      <mat-label>Enter your password</mat-label>
+      <input
+        matInput
+        [type]="hide() ? 'password' : 'text'"
+        required
+        [formControl]="password"
+        (blur)="updatePasswordErrorMessage()"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide()"
+      >
+        <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+      @if (password.invalid) {
+        <mat-error>{{ passwordErrorMessage() }}</mat-error>
+        }
+    </mat-form-field>
+    <button
+      mat-raised-button
+      style="width: 100%; display: flex; align-self: center; margin-top: 30px"
+    >
+      log in
     </button>
+  </mat-card-content>
 </mat-card>
