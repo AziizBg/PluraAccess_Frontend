@@ -25,4 +25,12 @@ mat-card-subtitle {
 .sessions{
     background-image: url("../../../../../public/sessions.png");
     background-size: cover;
+    margin-top: 10px
+}
+.notifications{
+    background-image: url("../../../../../public/notifications.png");
+    background-size: cover;
+    margin-top: 10px;
+    height:85px  !important;
+    width: 85px !important;
 }

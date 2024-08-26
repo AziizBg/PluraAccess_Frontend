@@ -55,4 +55,11 @@ export const allComments = {
     class: 'sessions',
     //sessions icon
   },
+  notifications: {
+    title: 'My Notifications',
+    subtitle:
+      'Here you can find all your notifications to check the application flow',
+    class: 'notifications',
+    //sessions icon
+  }
 };

@@ -1,1 +1,19 @@
-<p>notifications works!</p>
+<app-comments [comment]="comment"></app-comments>
+
+<mat-card>
+  <mat-card-header> </mat-card-header>
+  <app-notifiation
+    *ngFor="let notification of data"
+    [notifiation]="notification"
+  ></app-notifiation>
+
+  <mat-paginator
+    (page)="change($event)"
+    [length]="length"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[3, 5, 10, 15]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</mat-card>

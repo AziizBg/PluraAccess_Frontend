@@ -24,8 +24,9 @@ export class SessionsComponent implements OnInit {
   length: number = 10;
   pageIndex: number = 0;
   pageSize: number = 3;
-  constructor(private service: SessionService, private cookieService: CookieService) {}
   data: Session[] = [];
+
+  constructor(private service: SessionService, private cookieService: CookieService) {}
 
   comment: Comment = allComments.sessions;
 

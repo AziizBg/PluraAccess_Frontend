@@ -1,0 +1,30 @@
+<mat-card>
+    <mat-card-header>
+      <div style="width: 100%">
+        <!-- notification title-->
+        <mat-card-title>
+          {{ notifiation?.title }}
+        </mat-card-title>
+  
+        <!-- notification date time -->
+        <div style="margin-top: -30px">
+          <mat-card-subtitle align="end">{{
+            getDate(notifiation?.createdAt)
+          }}</mat-card-subtitle>
+          <mat-card-subtitle align="end"
+            >{{ getTime(notifiation?.createdAt) }}
+          </mat-card-subtitle>
+        </div>
+      </div>
+    </mat-card-header>
+  
+  
+      <!-- notification message -->
+    <mat-card-content style="margin-top: -10px">
+      <p style="margin-bottom: 16px;">
+        {{ notifiation?.message }}
+      </p>
+    </mat-card-content>
+
+  </mat-card>
+  

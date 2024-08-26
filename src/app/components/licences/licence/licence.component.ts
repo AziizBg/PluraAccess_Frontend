@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { ResponseSchema } from '../../../models/response.schema';
 import { User } from '../../../models/user';
 import { LicenceService } from '../../../services/licence.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-licence',
@@ -53,7 +54,7 @@ export class LicenceComponent implements OnInit, OnChanges {
   SESSION_DURATION = 120 * 60 ; //2 hours
   EXTEND_TIME = 10 ; //10 seconds
 
-  constructor(private service: LicenceService) {}
+  constructor(private service: LicenceService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.updateCountdownConfig();
@@ -104,6 +105,8 @@ export class LicenceComponent implements OnInit, OnChanges {
   handleSessionCountDown(event: CountdownEvent) {
     if (event.action == 'notify') {
       this.isExtendable = true;
+      if(this.licence?.currentSession?.user?.id == this.user?.id && this.licencesAvailable)
+      this.toastr.warning("Extend licence before the timer ends")
     }
   }
 }
