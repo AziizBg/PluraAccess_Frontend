@@ -1,11 +1,12 @@
-import { Session } from "./session";
+import { Session } from './session';
 
-export interface User{
-    id:number,
-    userName:string,
-    sessions?:Session[],
-    isStudying?:boolean,
-    isRequesting?:boolean,
-    queuePosition?:number,
-    bookedLicenceId?:number
+export interface User {
+  id: number;
+  userName: string;
+  sessions?: Session[];
+  isStudying?: boolean;
+  isRequesting?: boolean;
+  queuePosition?: number;
+  bookedLicenceId?: number;
+  role?: string;
 }

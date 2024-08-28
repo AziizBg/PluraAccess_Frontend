@@ -1,9 +1,16 @@
-
 <mat-toolbar color="primary">
-    <button mat-icon-button>
-        <mat-icon>menu</mat-icon>
-    </button>
-    <button routerLink="licences" mat-button>licences</button>
-    <button routerLink="sessions" mat-button>sessions</button>
-    <button routerLink="notifications" mat-button>notifications</button>
+  <button mat-icon-button>
+    <mat-icon>menu</mat-icon>
+  </button>
+  <button routerLink="licences" mat-button>licences</button>
+  <button routerLink="sessions" mat-button>sessions</button>
+  <button routerLink="notifications" mat-button>notifications</button>
+  <button
+    mat-button
+    color="warn"
+    style="color: rgb(253, 219, 219) !important"
+    (click)="logOut()"
+  >
+    Log out
+  </button>
 </mat-toolbar>

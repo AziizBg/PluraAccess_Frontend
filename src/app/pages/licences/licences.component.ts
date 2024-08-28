@@ -86,14 +86,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
   }
 
   LoadUsersData() {
-    this.user.id = +this.cookieService.get('id');
-    this.userService.getUser(this.user.id).subscribe((item: any) => {
-      this.user = {
-        id: item.id,
-        userName: item.userName,
-        bookedLicenceId: item.bookedLicenceId,
-      };
-    });
+    this.user = this.userService.getConnectedUser();
   }
 
   extendLicence(id: number) {

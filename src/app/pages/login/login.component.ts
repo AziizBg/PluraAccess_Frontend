@@ -14,6 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { LoginDto } from '../../dto/login.dto';
 import { ToastrService } from 'ngx-toastr';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +41,8 @@ export class LoginComponent {
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {
     merge(this.loginForm.get('email')?.valueChanges)
       .pipe(takeUntilDestroyed())
@@ -90,9 +92,9 @@ export class LoginComponent {
       };
       this.userService.login(loginDto).subscribe(
         (response: any) => {
-          console.log(response);
           this.toastr.success(response.message);
-          this.router.navigate(["licences"])
+          this.userService.setToken(response.token);
+          this.router.navigate(['licences']);
         },
         (error: any) => {
           console.log(error);
