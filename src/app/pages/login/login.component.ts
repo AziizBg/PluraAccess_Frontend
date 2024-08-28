@@ -93,7 +93,7 @@ export class LoginComponent {
       this.userService.login(loginDto).subscribe(
         (response: any) => {
           this.toastr.success(response.message);
-          this.userService.setToken(response.token);
+          // this.userService.setToken(response.token);
           this.router.navigate(['licences']);
         },
         (error: any) => {

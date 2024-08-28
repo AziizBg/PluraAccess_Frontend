@@ -6,11 +6,14 @@ import { RegisterDto } from '../dto/register.dto';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { User } from '../models/user';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private userSubject = new BehaviorSubject<User | null>(null);
+
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
@@ -25,14 +28,21 @@ export class UserService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.post(
-      'https://localhost:7189/api/User/login/',
-      {
-        Email: dto.email,
-        Password: dto.password,
-      },
-      { headers }
-    );
+    return this.http
+      .post(
+        'https://localhost:7189/api/User/login/',
+        {
+          Email: dto.email,
+          Password: dto.password,
+        },
+        { headers }
+      )
+      .pipe(
+        tap((response: any) => {
+          this.setToken(response.token);
+          this.userSubject.next(this.getConnectedUser());
+        })
+      );
   }
   register(dto: RegisterDto) {
     const headers = new HttpHeaders({
@@ -74,6 +84,11 @@ export class UserService {
 
   logOut() {
     this.cookieService.delete('identity');
+    this.userSubject.next(null);
     this.router.navigate(['/']);
+  }
+
+  getUserObservable(){
+    return this.userSubject.asObservable();
   }
 }

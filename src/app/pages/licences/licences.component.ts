@@ -47,8 +47,11 @@ export class LicencesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.LoadUsersData();
+    // load initial data
+    this.LoadUserData();
     this.LoadLicencesData();
+
+    // subscribe to notifications
     this.notificationSubscription =
       this.notificationService.notification$.subscribe(
         (notification: Notification) => {
@@ -59,8 +62,8 @@ export class LicencesComponent implements OnInit, OnDestroy {
             notification.title == 'First in queue' &&
             notification.licenceId
           ) {
-            this.LoadUsersData();
-            // this.comment = allComments.first_in_queue;
+            this.LoadUserData();
+            this.comment = allComments.first_in_queue;
             this.toastr.success(notification.message);
           }
         }
@@ -85,7 +88,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
       });
   }
 
-  LoadUsersData() {
+  LoadUserData() {
     this.user = this.userService.getConnectedUser();
   }
 
@@ -110,7 +113,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
       (error) => {
         this.toastr.error('Licence Request Failed', '');
         this.LoadLicencesData();
-        this.LoadUsersData();
+        this.LoadUserData();
       }
     );
   }

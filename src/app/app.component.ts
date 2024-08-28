@@ -5,6 +5,9 @@ import { MaterialModule } from '../module/Material.Module';
 import { CookieService } from 'ngx-cookie-service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SignalrService } from './services/signalr.service';
+import { UserService } from './services/user.service';
+import { Observable } from 'rxjs';
+import { User } from './models/user';
 
 @Component({
   selector: 'app-root',
@@ -16,37 +19,35 @@ import { SignalrService } from './services/signalr.service';
 export class AppComponent implements OnInit {
   title = 'PluraAccess';
   showHeader = true;
+  user$!: Observable<User | null>;
 
   constructor(
     private cookieService: CookieService,
     private router: Router,
-    private singlarService: SignalrService
+    private singlarService: SignalrService,
+    private userService: UserService
   ) {
     this.router.events.subscribe(() => {
       this.checkRoute();
     });
+    this.user$ = userService.getUserObservable();
   }
+
   checkRoute() {
     const currentRoute = this.router.url;
-    this.showHeader = (currentRoute != '/' && currentRoute!="/register");
+    this.showHeader = currentRoute != '/' && currentRoute != '/register';
   }
 
   ngOnInit(): void {
     this.showHeader = window.location.pathname == '/';
-    const id = this.cookieService.get('id');
-    if (!id) this.cookieService.set('id', '1');
 
     const urlParams = new URLSearchParams(window.location.search);
-    const ngrokUrl = urlParams.get('ngrokUrl');
-    if (ngrokUrl) {
-      // Store the ngrok URL in a cookie
-      this.cookieService.set('ngrokUrl', ngrokUrl);
-      console.log(
-        'ngrok URL stored in cookie:',
-        this.cookieService.get('ngrokUrl')
-      );
-    }
-    this.singlarService.startConnection( +this.cookieService.get('id'));
-    this.singlarService.addListener();
+    this.user$.subscribe((user) => {
+      if (user) {
+        const userId = this.userService.getConnectedUser().id;
+        this.singlarService.startConnection(+this.cookieService.get('id'));
+        this.singlarService.addListener();
+      }
+    });
   }
 }
