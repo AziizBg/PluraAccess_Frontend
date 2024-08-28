@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ResponseSchema } from '../models/response.schema';
 import { CookieService } from 'ngx-cookie-service';
+import { LoginDto } from '../dto/login.dto';
+import { RegisterDto } from '../dto/register.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -12,5 +13,33 @@ export class UserService {
   getUser(id:number) {
     return this.http.get('https://localhost:7189/api/User/' + id);
   }
-}
 
+  login(dto:LoginDto){
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post(
+      'https://localhost:7189/api/User/login/',
+      {
+        Email: dto.email,
+        Password: dto.password
+      },
+      { headers }
+    );
+  }
+  register(dto:RegisterDto){
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post(
+      'https://localhost:7189/api/User/register/',
+      {
+        Email: dto.email,
+        Password: dto.password,
+        UserName: dto.userName,
+        Role:dto.email,
+      },
+      { headers }
+    );
+  }
+}

@@ -18,50 +18,55 @@
   </mat-card-subtitle>
 
   <mat-card-content style="width: 90%">
-    <mat-form-field style="width: 100%">
-      <mat-label>Enter your email</mat-label>
-      <input
-        matInput
-        placeholder="pat@example.com"
-        [formControl]="email"
-        (blur)="updateEmailErrorMessage()"
-        required
-      />
-      @if (email.invalid) {
-      <mat-error>{{ emailErrorMessage() }}</mat-error>
-      }
-    </mat-form-field>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field style="width: 100%">
+        <mat-label>Enter your email</mat-label>
+        <input
+          matInput
+          placeholder="pat@example.com"
+          formControlName="email"
+          (blur)="updateEmailErrorMessage()"
+          required
+        />
+        @if (loginForm.get('email')?.invalid) {
+        <mat-error>{{ emailErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
 
-    <br />
+      <br />
 
-    <mat-form-field style="width: 100%">
-      <mat-label>Enter your password</mat-label>
-      <input
-        matInput
-        [type]="hide() ? 'password' : 'text'"
-        required
-        [formControl]="password"
-        (blur)="updatePasswordErrorMessage()"
-      />
+      <mat-form-field style="width: 100%">
+        <mat-label>Enter your password</mat-label>
+        <input
+          matInput
+          [type]="hide() ? 'password' : 'text'"
+          required
+          formControlName="password"
+          (blur)="updatePasswordErrorMessage()"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        @if (loginForm.get('password')?.invalid) {
+        <mat-error>{{ passwordErrorMessage() }}</mat-error>
+        }
+      </mat-form-field>
       <button
-        mat-icon-button
-        matSuffix
-        (click)="clickEvent($event)"
-        [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hide()"
+        mat-flat-button
+        style="width: 100%; margin-top: 30px; background-color: #3c715d"
       >
-        <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        Log in
       </button>
-      @if (password.invalid) {
-      <mat-error>{{ passwordErrorMessage() }}</mat-error>
-      }
-    </mat-form-field>
-    <button mat-flat-button style="width: 100%; margin-top: 30px; background-color: #3c715d; ">
-      Log in
-    </button>
+    </form>
     <button
       mat-raised-button
-      style="width: 100%; margin-top: 10px; color: #3c715dc4; "
+      style="width: 100%; margin-top: 10px; color: #3c715dc4"
       routerLink="/register"
     >
       Don't have an account? Sign Up

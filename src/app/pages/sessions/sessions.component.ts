@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ResponseSchema } from '../../models/response.schema';
+import { ResponseSchema } from '../../dto/response.schema';
 import { SessionService } from '../../services/sessions.service';
 import { Session } from '../../models/session';
 import { MaterialModule } from '../../../module/Material.Module';
@@ -9,8 +9,8 @@ import { allComments } from '../../data/all-comments';
 import { SessionComponent } from '../../components/sessions/session/session.component';
 import { CommonModule } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginationDto } from '../../models/pagination';
-import { PaginatedResponseSchema } from '../../models/paginated-response.schema';
+import { PaginationDto } from '../../dto/pagination';
+import { PaginatedResponseSchema } from '../../dto/paginated-response.schema';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({

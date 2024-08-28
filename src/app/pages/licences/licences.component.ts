@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LicenceService } from '../../services/licence.service';
 import { Licence } from '../../models/licence';
-import { ResponseSchema } from '../../models/response.schema';
+import { ResponseSchema } from '../../dto/response.schema';
 import { MaterialModule } from '../../../module/Material.Module';
 import { CommonModule } from '@angular/common';
 import { DataViewModule } from 'primeng/dataview';
@@ -33,7 +33,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class LicencesComponent implements OnInit, OnDestroy {
   data: Licence[] = [];
-  user: User = { id: -1, name: '' };
+  user: User = { id: -1, userName: '' };
   comment: Comment = allComments.fetching;
   private notificationSubscription: Subscription = new Subscription(); // to manage notification subscription lifecycle
 
@@ -90,7 +90,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
     this.userService.getUser(this.user.id).subscribe((item: any) => {
       this.user = {
         id: item.id,
-        name: item.name,
+        userName: item.userName,
         bookedLicenceId: item.bookedLicenceId,
       };
     });

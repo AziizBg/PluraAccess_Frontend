@@ -27,6 +27,7 @@
           placeholder="Enter your username"
           formControlName="username"
           required
+          (blur)="updateUsernameErrorMessage()"
         />
         <mat-error *ngIf="registerForm.get('username')?.invalid">{{
           usernameErrorMessage()
@@ -42,6 +43,7 @@
           placeholder="pat@example.com"
           formControlName="email"
           required
+          (blur)="updateEmailErrorMessage()"
         />
         <mat-error *ngIf="registerForm.get('email')?.invalid">{{
           emailErrorMessage()
@@ -57,6 +59,7 @@
           [type]="hidePassword() ? 'password' : 'text'"
           required
           formControlName="password"
+          (blur)="updatePasswordErrorMessage()"
         />
         <button
           mat-icon-button
@@ -84,6 +87,7 @@
           [type]="hideConfirmPassword() ? 'password' : 'text'"
           required
           formControlName="confirmPassword"
+          (blur)="updateConfirmPasswordErrorMessage()"
         />
         <button
           mat-icon-button
@@ -103,7 +107,7 @@
 
       <button
         mat-flat-button
-        style="width: 100%; margin-top: 30px;"
+        style="width: 100%; margin-top: 30px;background-color:  #3c715d"
       >
         Register
       </button>

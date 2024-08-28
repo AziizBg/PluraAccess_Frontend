@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../module/Material.Module';
 import { NotificationComponent } from '../../components/notifications/notifiation/notifiation.component';
-import { PaginatedResponseSchema } from '../../models/paginated-response.schema';
-import { PaginationDto } from '../../models/pagination';
+import { PaginatedResponseSchema } from '../../dto/paginated-response.schema';
+import { PaginationDto } from '../../dto/pagination';
 import { CookieService } from 'ngx-cookie-service';
 import { Notification } from '../../models/notification';
 import { NotificationService } from '../../services/notification.service';

@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ResponseSchema } from '../models/response.schema';
+import { ResponseSchema } from '../dto/response.schema';
 import { Session } from '../models/session';
-import { PaginationDto } from '../models/pagination';
-import { PaginatedResponseSchema } from '../models/paginated-response.schema';
+import { PaginationDto } from '../dto/pagination';
+import { PaginatedResponseSchema } from '../dto/paginated-response.schema';
 
 @Injectable({
   providedIn: 'root'

@@ -9,7 +9,10 @@ import {
 } from '@angular/forms';
 import { merge } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { RegisterDto } from '../../dto/register.dto';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -20,16 +23,19 @@ import { RouterLink } from '@angular/router';
 })
 export class RegisterComponent {
   registerForm = new FormGroup({
-    username: new FormControl('', [
+    username: new FormControl('new user', [
       Validators.required,
       Validators.minLength(3),
     ]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
+    email: new FormControl('new@oddo-bhf.com', [
+      Validators.required,
+      Validators.email,
+    ]),
+    password: new FormControl('12345678', [
       Validators.required,
       Validators.minLength(8),
     ]),
-    confirmPassword: new FormControl('', [
+    confirmPassword: new FormControl('12345678', [
       Validators.required,
       Validators.minLength(8),
     ]),
@@ -39,11 +45,14 @@ export class RegisterComponent {
   emailErrorMessage = signal('');
   passwordErrorMessage = signal('');
   confirmPasswordErrorMessage = signal('');
-
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
 
-  constructor() {
+  constructor(
+    private userService: UserService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {
     merge(this.registerForm.get('username')?.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateUsernameErrorMessage());
@@ -117,11 +126,13 @@ export class RegisterComponent {
   }
 
   togglePasswordVisibility(event: MouseEvent) {
+    event.preventDefault();
     this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
   }
 
   toggleConfirmPasswordVisibility(event: MouseEvent) {
+    event.preventDefault();
     this.hideConfirmPassword.set(!this.hideConfirmPassword());
     event.stopPropagation();
   }
@@ -133,6 +144,22 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       const formData = this.registerForm.value;
       console.log('formdata:', formData);
+      const registerDto: RegisterDto = {
+        email: formData.email ?? '',
+        password: formData.password ?? '',
+        userName: formData.username ?? '',
+      };
+      this.userService.register(registerDto).subscribe(
+        (response: any) => {
+          console.log(response);
+          this.toastr.success(response.message);
+          this.router.navigate(["/"])
+        },
+        (error: any) => {
+          console.log(error);
+          this.toastr.error(error.error);
+        }
+      );
     } else {
       console.log(this.registerForm.errors);
       console.log(this.registerForm.get('username')?.errors);

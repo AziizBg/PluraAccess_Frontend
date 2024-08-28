@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Licence } from '../models/licence';
-import { ResponseSchema } from '../models/response.schema';
+import { ResponseSchema } from '../dto/response.schema';
 import { User } from '../models/user';
 import { CookieService } from 'ngx-cookie-service';
 
