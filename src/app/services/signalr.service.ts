@@ -4,6 +4,7 @@ import { NotificationService } from './notification.service';
 import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import { Notification } from '../models/notification';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class SignalrService {
     private toastrService: ToastrService,
     private notificationService: NotificationService,
     private cookieService: CookieService,
+    private userService:UserService
   ) {}
 
   public startConnection = (userId: number) => {
@@ -32,7 +34,7 @@ export class SignalrService {
   };
 
   public showNotification(notification: Notification) {
-    const userId = +this.cookieService.get('id');
+    const userId = this.userService.getConnectedUser().id;
     console.log('notification:', notification);
     if (
       notification.userId != userId &&

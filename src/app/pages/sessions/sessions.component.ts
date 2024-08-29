@@ -12,6 +12,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PaginationDto } from '../../dto/pagination';
 import { PaginatedResponseSchema } from '../../dto/paginated-response.schema';
 import { CookieService } from 'ngx-cookie-service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-sessions',
@@ -26,7 +27,11 @@ export class SessionsComponent implements OnInit {
   pageSize: number = 3;
   data: Session[] = [];
 
-  constructor(private service: SessionService, private cookieService: CookieService) {}
+  constructor(
+    private service: SessionService,
+    private cookieService: CookieService,
+    private userService:UserService
+  ) {}
 
   comment: Comment = allComments.sessions;
 
@@ -34,7 +39,7 @@ export class SessionsComponent implements OnInit {
     this.LoadData({ pageIndex: this.pageIndex, pageSize: this.pageSize });
   }
   LoadData(pagination: PaginationDto) {
-    const id = Number(this.cookieService.get('id'));
+    const id = this.userService.getConnectedUser().id;
     this.pageSize = pagination.pageSize ? pagination.pageSize : this.pageSize;
     this.pageIndex = pagination.pageIndex
       ? pagination.pageIndex

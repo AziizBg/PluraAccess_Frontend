@@ -11,6 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { CommentsComponent } from '../../components/licences/comments/comments.component';
 import { allComments } from '../../data/all-comments';
 import { Comment } from '../../models/comment';
+import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-notifications',
   standalone: true,
@@ -28,7 +29,8 @@ export class NotificationsComponent implements OnInit {
 
   constructor(
     private readonly cookieService: CookieService,
-    private readonly service: NotificationService
+    private readonly service: NotificationService,
+    private readonly userService:UserService
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +38,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   LoadData(pagination: PaginationDto) {
-    const id = Number(this.cookieService.get('id'));
+    const id = this.userService.getConnectedUser().id;
     this.pageSize = pagination.pageSize ? pagination.pageSize : this.pageSize;
     this.pageIndex = pagination.pageIndex
       ? pagination.pageIndex

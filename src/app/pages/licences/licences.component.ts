@@ -89,7 +89,13 @@ export class LicencesComponent implements OnInit, OnDestroy {
   }
 
   LoadUserData() {
-    this.user = this.userService.getConnectedUser();
+    this.userService.getAllUser().subscribe((item: any) => {
+      this.user = {
+        id: item.id,
+        userName: item.userName,
+        bookedLicenceId: item.bookedLicenceId,
+      };
+    });
   }
 
   extendLicence(id: number) {
@@ -107,7 +113,7 @@ export class LicencesComponent implements OnInit, OnDestroy {
         this.user.isStudying = true;
         this.user.isRequesting = false;
         this.comment = allComments.learning;
-        // this.LoadLicencesData();
+        this.LoadLicencesData();
         this.toastr.success('Licence Taken. Learn well !', '');
       },
       (error) => {
@@ -199,6 +205,8 @@ export class LicencesComponent implements OnInit, OnDestroy {
         // if in queue
         if (position) {
           this.user.queuePosition = position;
+          console.log(this.user);
+          
           // if user has a booked licence (first in queue)
           if (this.user.bookedLicenceId) {
             this.comment = allComments.first_in_queue;

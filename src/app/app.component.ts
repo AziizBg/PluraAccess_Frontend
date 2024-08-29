@@ -39,13 +39,18 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.userService.isLoggedIn()) {
+      const user = this.userService.getConnectedUser();
+      this.singlarService.startConnection(user.id);
+      this.singlarService.addListener();
+    }
     this.showHeader = window.location.pathname == '/';
 
     const urlParams = new URLSearchParams(window.location.search);
     this.user$.subscribe((user) => {
       if (user) {
         const userId = this.userService.getConnectedUser().id;
-        this.singlarService.startConnection(+this.cookieService.get('id'));
+        this.singlarService.startConnection(userId);
         this.singlarService.addListener();
       }
     });

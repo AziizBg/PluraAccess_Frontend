@@ -20,7 +20,8 @@ export class UserService {
     private router: Router
   ) {}
 
-  getUser(id: number) {
+  getAllUser() {
+    const id = this.getConnectedUser().id;
     return this.http.get('https://localhost:7189/api/User/' + id);
   }
 
